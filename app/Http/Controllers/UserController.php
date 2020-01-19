@@ -165,9 +165,9 @@ class UserController extends Controller
                 $image_path = 'storage/profile/' . $upload->image;
 
                 File::delete($image_path);
-                $imagename = Storage::disk('public')->put('profile', $img);
             }
             // return('noop');
+            $imagename = Storage::disk('public')->put('profile', $img);
             $imgArr = explode('/', $imagename);
             $image_name = $imgArr[1];
             $upload->profile = '/storage/profile/' . $image_name;
