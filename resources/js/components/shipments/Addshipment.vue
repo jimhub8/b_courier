@@ -95,7 +95,7 @@
                                                 </v-layout>
                                             </div>
                                             <!-- <v-flex xs6 sm6 v-if="cust.id === model">
-                                                    <v-select :items="Allcustomer" v-model="selectCl" label="Select Sender" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
+                                                    <v-select :items="Allcustomer" v-model="selectCl" label="Select Sender" single-line item-text="name" item-value="id" return-object></v-select>
                                                 </v-flex> -->
                                             <div v-else v-for="cust in Allcustomer" :key="cust.id">
                                                 <v-layout wrap row>
@@ -224,7 +224,7 @@
                                                         <option value="Same day">Same day</option>
                                                     </select>
 
-                                                    <div class="form-group col-md-6">
+                                                    <div class="form-group col-md-12">
                                                         <label for="insurance" class="col-md-4 col-form-label text-md-right">Insuarance</label>
                                                         <select class="custom-select" v-model="form.insuarance_status">
                                                             <option value="yes">Yes</option>
@@ -233,7 +233,7 @@
                                                     </div>
 
                                                     <!-- </div>  -->
-                                                    <div class="form-group col-md-4">
+                                                    <div class="form-group col-md-12">
                                                         <label for="payment" class="col-md-4 col-form-label text-md-right">Paid</label>
                                                         <select class="custom-select" v-model="form.payment">
                                                             <option value="yes">Yes</option>
@@ -288,13 +288,13 @@
                                             </v-flex>
 
                                             <v-flex xs12 sm4>
-                                                <v-select :items="Allcustomer" v-model="selectC" :hint="`${selectC.name}`" label="Select Client" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
+                                                <v-select :items="Allcustomer" v-model="selectC" label="Select Client" single-line item-text="name" item-value="id" return-object></v-select>
                                             </v-flex>
                                             <v-flex xs12 sm4>
-                                                <v-select :items="AllDrivers" v-model="selectD" :hint="`${select.name}`" label="Select Driver" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
+                                                <v-select :items="riders" v-model="selectD" label="Select Driver" single-line item-text="name" item-value="id" return-object></v-select>
                                             </v-flex>
                                             <v-flex xs12 sm4>
-                                                <v-select :items="AllBranches" v-model="selectB" :hint="`${selectB.branch_name}`" label="Select Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select>
+                                                <v-select :items="AllBranches" v-model="selectB" label="Select Branch" single-line item-text="branch_name" item-value="id" return-object></v-select>
                                             </v-flex>
 
                                             <v-flex xs12 sm4>
@@ -342,7 +342,7 @@
 <script>
 import VueBarcode from "vue-barcode";
 export default {
-    props: ["user", 'role', 'Allcustomer', 'AllDrivers', 'AllBranches'],
+    props: ["user", 'role', 'Allcustomer', 'AllBranches'],
     components: {
         barcode: VueBarcode
     },
@@ -495,6 +495,10 @@ export default {
             return this.form.products.reduce(function (carry, product) {
                 return carry + parseFloat(product.price);
             }, 0);
+        },
+
+        riders() {
+            return this.$store.getters.riders
         },
     },
 };

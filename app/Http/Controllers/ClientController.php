@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Notifications\ClientNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -50,8 +51,11 @@ class ClientController extends Controller
         $user->start_day = $request->start_day;
         $user->show_on = $request->show_on;
         $user->activation_token = str_random(60);
-        $user->save();
+        // $user->save();
         $create_user = $user;
+        if ($request->send_email) {
+            $create_user->notify(new ClientNotification($create_user, $password));
+        }
         // $user->assignRole('Client');
         // $user->assignRole($request->role_id);
         // $user->givePermissionTo($request->selected);

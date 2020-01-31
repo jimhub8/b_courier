@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\User;
 
-class SignupActivate extends Notification 
+class SignupActivate extends Notification
 {
     // use Queueable;
     protected $password, $user;
@@ -48,7 +48,7 @@ class SignupActivate extends Notification
 
         return (new MailMessage)
             ->subject('Confirm your account')
-            ->line('You have been added to the Speedball courier app! Before you begin, you must confirm your account. Login with your email and this password:' . $this->password)
+            ->line('You have been added to the ' . env('APP_NAME') . ' Before you begin, you must confirm your account. Login with your email and this password: ' . $this->password)
             ->action('Confirm Account', url($url))
             ->line('Thank you for using our application!');
     }

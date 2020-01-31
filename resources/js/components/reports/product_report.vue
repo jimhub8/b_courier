@@ -132,7 +132,7 @@ export default {
             if (query.length > 2) {
                 this.loading = true;
                 this.form.search = query
-                axios.get(`searchClient/${query}`).then((response) => {
+                axios.get(`/searchClient/${query}`).then((response) => {
                     this.loading = false
                     this.clients = response.data
 

@@ -205,12 +205,12 @@
             <!-- Data table -->
         </v-container>
     </v-content>
-    <AddShipment :addShipment="dialog" @alertRequest="showalert" :Allcustomer="clients" :user="user" :role="role" :countries="countries" :AllDrivers="AllDrivers"></AddShipment>
-    <EditShipment :EditShipment="dialog1" @alertRequest="showalert" :Allcustomer="clients" :user="user" :role="role" :countries="countries" :AllDrivers="AllDrivers" :form="editedItem"></EditShipment>
+    <AddShipment :addShipment="dialog" @alertRequest="showalert" :Allcustomer="clients" :user="user" :role="role" :countries="countries" :AllDrivers="riders"></AddShipment>
+    <EditShipment :EditShipment="dialog1" @alertRequest="showalert" :Allcustomer="clients" :user="user" :role="role" :countries="countries" :AllDrivers="riders" :form="editedItem"></EditShipment>
     <ShowShipment :element="element" :customers="clients" :showItems="showItem"></ShowShipment>
     <UpdateShipment :UpdateShipment="updateModal" :markers="markers" :updateitedItem="updateitedItem" @alertRequest="showalert"></UpdateShipment>
     <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @alertRequest="showalert" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
-    <AssignDriver :AllDrivers="AllDrivers" :OpenAssignDriver="AssignDriverModel" @alertRequest="showalert" :updateitedItem="editedItem" :selectedItems="selected"></AssignDriver>
+    <AssignDriver :AllDrivers="riders" :OpenAssignDriver="AssignDriverModel" @alertRequest="showalert" :updateitedItem="editedItem" :selectedItems="selected"></AssignDriver>
     <AssignBranch :countries="countries" :OpenAssignBranch="AssignBranchModel" @alertRequest="showalert" :updateitedItem="editedItem" :selectedItems="selected"></AssignBranch>
     <TrackShipment @refreshRequest="sortItem" :shipments="updateitedItem" :OpenTrackBranch="trackModel" @alertRequest="showalert" :updateitedItem="editedItem" :selectedItems="selected" :user="user"></TrackShipment>
     <myCsvFile></myCsvFile>
@@ -263,7 +263,6 @@ export default {
             printModal: false,
             mloading: false,
             timer: "",
-            AllDrivers: [],
             element: [],
             glsearch: {
                 search: ''
@@ -429,6 +428,7 @@ export default {
             this.$refs.form.reset();
         },
         openShipment() {
+            this.getDrivers()
             eventBus.$emit('addShipmentEvent')
         },
         addProduct() {

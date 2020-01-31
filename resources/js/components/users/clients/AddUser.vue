@@ -70,6 +70,7 @@
                                             </el-option>
                                         </el-select>
                                     </div> -->
+                                    <v-checkbox v-model="form.send_email" label="Send login password"></v-checkbox>
                                 </v-layout>
                             </v-container>
                             <v-card-actions>

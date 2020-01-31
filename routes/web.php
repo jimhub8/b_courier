@@ -61,8 +61,9 @@ Route::get('scheduler', function () {
 Route::get('login/{service}', 'Auth\LoginController@redirectToProvider');
 Route::get('login/{service}/callback', 'Auth\LoginController@handleProviderCallback');
 Route::get('/search', 'ShipmentController@search')->name('search');
-Route::get('/algoria', function () {
-		return view('vendor.passport.passport');
+
+Route::get('/passport', function () {
+    return view('vendor.passport.passport');
 });
 
 // Route::get('/map', function () {

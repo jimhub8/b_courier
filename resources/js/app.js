@@ -74,6 +74,13 @@ const store = new Vuex.Store(StoreData)
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+
+import passportAuthorizedclients from './components/passport/AuthorizedClients.vue'
+import passportClients from './components/passport/Clients.vue'
+import passportPersonalaccesstokens from './components/passport/PersonalAccessTokens.vue'
+
+
 import myStatuses from './components/status/Status.vue';
 import myDStatus from './components/status/DStatus.vue';
 // axios.defaults.baseURL = 'http://courier.dev/api/getData';
@@ -131,7 +138,7 @@ import myScreen from './components/screen';
 
 import myDispatch from './components/scanner/dispatch'
 import myInvoice from './components/invoice/Getinvoice'
- 
+
 const routes = [
     // {path: '/', component: dashboard },
     { path: '/users', component: myUser },
@@ -191,8 +198,8 @@ const app = new Vue({
         myReports, mybranchShip, myRoles, myCharges,
         myTown, myWaybill, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash,
         myunauth, myDash, myFilter, myChatty, myFinance, myFinClient, mySticker, myDStatus, myLogs, mySc,
-
-        myClients, myScreen, myRiders, myDispatch, myInvoice
+        myClients, myScreen, myRiders, myDispatch, myInvoice,
+        passportAuthorizedclients, passportClients, passportPersonalaccesstokens,
         // myContainer, myUploadFile, myTasks, myscheduled
     },
 });
