@@ -92,21 +92,11 @@ class ShipmentController extends Controller
         $shipment->from_city = $request->from_city;
         $shipment->user_id = $user_id;
 
-        if ($request->model) {
-            $shipment->client_id = $request->model;
-            $sender = User::find($request->model);
-            $shipment->sender_name = $sender->name;
-            $shipment->sender_email = 'info@speedballcourier.com';
-            $shipment->sender_phone = '+254743332743';
-            $shipment->sender_address = '636400100';
-            $shipment->sender_city = $sender->city;
-        } else {
-            $shipment->sender_name = 'Speedball Courier';
-            $shipment->sender_email = 'info@speedballcourier.com';
-            $shipment->sender_phone = '+254743332743';
-            $shipment->sender_address = '636400100';
-            $shipment->sender_city = 'Nairobi';
-        }
+        $shipment->sender_name = $request->form['sender_name'];
+        $shipment->sender_email = $request->form['sender_email'];
+        $shipment->sender_phone = $request->form['sender_phone'];
+        $shipment->sender_address = $request->form['sender_address'];
+        $shipment->sender_city = $request->form['sender_city'];
 
         // return $user_id;
         $shipment->shipment_id = random_int(1000000, 9999999);

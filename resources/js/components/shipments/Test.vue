@@ -53,7 +53,7 @@ export default {
                 })
         },
         download() {
-            let pdfName = 'SpeedBall';
+            let pdfName = 'Boxleo';
             var doc = new jsPDF();
             // doc.text(this.name, 10, 10);
             var doc = new jsPDF();
@@ -88,10 +88,10 @@ export default {
 
                 // doc.setLineWidth(0.5);
                 // doc.line(5, 25, 60, 25);
-                doc.text(5, 30, 'SpeedBall Courier Services.');
+                doc.text(5, 30, 'Boxleo Courier Services.');
                 doc.text(5, 40, 'Location: ' + element['sender_city']);
                 doc.text(5, 50, 'Phone: ' + element['sender_phone']);
-                doc.text(5, 60, 'Email: info@speedballcourier.com');
+                doc.text(5, 60, 'Email: info@boxleo.co.ke');
                 // doc.setLineWidth(0.5);
                 // doc.line(5, 65, 60, 65);
 
@@ -105,9 +105,9 @@ export default {
                 doc.setFontSize(12)
                 // doc.text(200, 110, 'And some more', null, null, 'right');
                 doc.text(5, 80, 'Sender Details :');
-                doc.text(5, 90, 'Name: SpeedBall Courier Services');
+                doc.text(5, 90, 'Name: Boxleo Courier Services');
                 doc.text(5, 100, 'Phone: ' + element['sender_phone']);
-                doc.text(5, 110, 'Email: info@speedballcourier.com');
+                doc.text(5, 110, 'Email: info@boxleo.co.ke');
 
                 doc.text(80, 80, 'Client Details :', null, null, 'left');
                 doc.text(80, 90, 'Name: ' + element['client_name'], null, null, 'left');

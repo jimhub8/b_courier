@@ -101,7 +101,7 @@
                                                             <td>SHP-78428558</td>
                                                             <td>24 Apr 2019</td>
                                                             <td>DELIVERED</td>
-                                                            <td>SPEEDBALL COURIER SERVICES LTD</td>
+                                                            <td>BOXLEO COURIER</td>
                                                             <td>78428558</td>
                                                             <td>24 Apr 2019</td>
                                                         </tr>

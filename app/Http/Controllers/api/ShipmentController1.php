@@ -90,13 +90,13 @@ class ShipmentController1 extends Controller
 			$shipment->client_id = $request->model;
 			$sender = User::find($request->model);
 			$shipment->sender_name = $sender->name;
-			$shipment->sender_email = 'info@speedballcourier.com';
+			$shipment->sender_email = 'info@boxleo.co.ke';
 			$shipment->sender_phone = '+254743332743';
 			$shipment->sender_address = '636400100';
 			$shipment->sender_city = $sender->city;
 		} else {
-			$shipment->sender_name = 'Speedball Courier';
-			$shipment->sender_email = 'info@speedballcourier.com';
+			$shipment->sender_name = 'Boxleo Courier';
+			$shipment->sender_email = 'info@boxleo.co.ke';
 			$shipment->sender_phone = '+254743332743';
 			$shipment->sender_address = '636400100';
 			$shipment->sender_city = 'Nairobi';

@@ -9,14 +9,14 @@ class Sms
         return $phone;
         // dd($phone . '   ' . $message);
         // $phone = '254778301465';
-        
+
 //$phone = '254731090832';
         // dd($phone);
         // $phone = '254706920275';
         $sms = $message;
-        $senderID = 'SPEEDBALL';
+        $senderID = 'Boxleo';
 
-        $login = 'SPEEDBALL';
+        $login = 'Boxleo';
         $password = 's12345';
 
         $clientsmsID = rand(1000, 9999);

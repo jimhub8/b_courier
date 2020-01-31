@@ -56,9 +56,8 @@ return [
      */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'jimlaravel@gmail.com'),
-        // 'address' => env('MAIL_FROM_ADDRESS', 'info@speedballcourier.com'),
-        'name' => env('MAIL_FROM_NAME', 'SpeedBall'),
+        'address' => env('MAIL_FROM_ADDRESS', 'notification@boxleo.co.ke'),
+        'name' => env('MAIL_FROM_NAME', env('APP_NAME')),
     ],
 
     /*

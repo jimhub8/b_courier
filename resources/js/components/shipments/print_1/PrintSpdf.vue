@@ -40,7 +40,7 @@ export default {
         });
     },
     download() {
-      let pdfName = "SpeedBall";
+      let pdfName = "Boxleo";
       var doc = new jsPDF();
       // doc.text(this.name, 10, 10);
       // var doc = new jsPDF();
@@ -74,13 +74,13 @@ export default {
       doc.text(100, 120, "Sender Details", null, null, "center");
       doc.setFontSize(12);
       doc.rect(18, 125, 170, 20);
-      doc.text(20, 132, "Sent By: SpeedBall Courier Services");
+      doc.text(20, 132, "Sent By: Boxleo Courier Services");
 
         if (this.element.sender_name == 'Pavel Shpolskiy') {
             doc.text(20, 139, "Email: uct.help24@gmail.com");
             doc.text(120, 139, "Help: +971 55 744 0815 (WHATSAPP ONLY)");
         } else {
-            doc.text(20, 132, "Sent By: SpeedBall Courier Services");
+            doc.text(20, 132, "Sent By: Boxleo Courier Services");
             doc.text(120, 132, "Phone: +25420760877");
         }
       // Client Details

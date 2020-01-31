@@ -94,8 +94,8 @@ class GoogledriveController_copy extends Controller
                 // $shipment->to_city = $order['to_city'];
                 $shipment->cod_amount = $order['PRICE'];
                 // $shipment->from_city = $order['from_city'];
-                $shipment->sender_name = 'Speedball';
-                $shipment->sender_email = 'info@speedballcourier.com';
+                $shipment->sender_name = env('APP_NAME');
+                $shipment->sender_email = 'info@boxleo.co.ke';
                 $shipment->sender_phone = '0700100010';
                 $shipment->sender_address = 'Nairobi, Kenya';
                 $shipment->sender_city = 'Nairobi';

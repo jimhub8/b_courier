@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'SpeedBall'),
+    'name' => env('APP_NAME'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://speedball-215310.appspot.com'),
+    'url' => env('APP_URL'),
 
     /*
     |--------------------------------------------------------------------------
@@ -165,7 +165,7 @@ return [
         // Maatwebsite\Excel\ExcelServiceProvider::class,
         // niklasravnsborg\LaravelPdf\PdfServiceProvider::class
         // Snowfire\Beautymail\BeautymailServiceProvider::class,
-        // App\Providers\SpeedballServiceProvider::class,
+        // App\Providers\BoxleoServiceProvider::class,
 
         // \Safaricom\Mpesa\MpesaServiceProvider::class,
         \Torann\GeoIP\GeoIPServiceProvider::class,

@@ -43,8 +43,8 @@ class SmsController extends Controller
                     ' regards. ' . "\n" . ' ';
             }
             // return $sms;
-            $senderID = 'SPEEDBALL';
-            $login = 'SPEEDBALL';
+            $senderID = 'Boxleo';
+            $login = 'Boxleo';
             $password = 'sp33dbal';
 
             $clientsmsID = rand(1000, 9999);

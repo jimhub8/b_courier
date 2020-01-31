@@ -26,7 +26,7 @@
                             <li class="list-group-item"><label for=""><b>Waybill Number: </b></label>{{ shipments.airway_bill_no }}</li>
                             <li class="list-group-item"><label for=""><b>From: </b></label>{{ shipments.sender_city }}</li>
                             <li class="list-group-item"><label for=""><b>Status: </b></label>{{ shipments.status }}</li>
-                            <li class="list-group-item"><label for=""><b>Delivery Status: </b></label>{{ shipments.derivery_status }}</li> 
+                            <li class="list-group-item"><label for=""><b>Delivery Status: </b></label>{{ shipments.derivery_status }}</li>
                         </ul>
                     </v-flex>
 
@@ -78,8 +78,8 @@
                     </v-flex>
                     <v-flex xs12 sm6>
                         <ul class="list-group">
-                            <li class="list-group-item"><label for=""><b>Sender Name:</b> </label>SpeedBall Courier Services</li>
-                            <li class="list-group-item"><label for=""><b>Sender Email:</b> </label>info@speedballcourier.com</li>
+                            <li class="list-group-item"><label for=""><b>Sender Name:</b> </label>Boxleo Courier Services</li>
+                            <li class="list-group-item"><label for=""><b>Sender Email:</b> </label>info@boxleo.co.ke</li>
                             <li class="list-group-item"><label for=""><b>Sender Phone:</b> </label>+254728492446</li>
                         </ul>
                     </v-flex>

@@ -59,7 +59,7 @@ return [
             'driver' => 'local',
             'root' => 'estorage',
         ],
-        
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -72,7 +72,7 @@ return [
 
     // 'gcs' => [
     //     'driver' => 'gcs',
-    //     'project_id' => env('GOOGLE_CLOUD_PROJECT_ID', 'speedball-215310'),
+    //     'project_id' => env('GOOGLE_CLOUD_PROJECT_ID', 'Boxleo-215310'),
     //     'key_file' => env('GOOGLE_APPLICATION_CREDENTIALS', './my-buckets.json'), // optional: /path/to/service-account.json
     //     'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET', 'my-buckets'),
     //     'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', null), // optional: /default/path/to/apply/in/bucket

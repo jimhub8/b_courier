@@ -114,7 +114,7 @@ export default {
     methods: {
         update() {
             this.loading = true
-            this.form.country_name = this.form.country.country_name
+            // this.form.country_name = this.country.country_name
             axios.patch(`/users/${this.form.id}`, {
                 form: this.form,
                 selected: this.selected

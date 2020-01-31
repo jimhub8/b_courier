@@ -41,7 +41,7 @@ export default {
                 });
         },
         download() {
-            let pdfName = "SpeedBall";
+            let pdfName = "Boxleo";
             var doc = new jsPDF();
             // doc.text(this.name, 10, 10);
             // var doc = new jsPDF();
@@ -73,9 +73,9 @@ export default {
             doc.text(100, 120, "Sender Details", null, null, "center");
             doc.setFontSize(12);
             doc.rect(18, 125, 170, 20);
-            doc.text(20, 132, "Sent By: SpeedBall Courier Services");
+            doc.text(20, 132, "Sent By: Boxleo Courier Services");
             doc.text(120, 132, "Phone: +256783060641");
-            doc.text(20, 139, "Email: info.ug@speedballcourier.com");
+            doc.text(20, 139, "Email: info@boxleo.co.ke");
             // Client Details
             doc.rect(18, 145, 170, 10);
             doc.setFontSize(14);
