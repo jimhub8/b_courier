@@ -7,6 +7,7 @@ use Spatie\Permission\Models\Permission;
 use App\User;
 use App\Shipment;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PermissionController extends Controller
 {
@@ -17,11 +18,16 @@ class PermissionController extends Controller
 
     public function getUsersCount(Request $request)
     {
-        if (empty($request->country)) {
-            return User::where('country_id', Auth::user()->country_id)->whereYear('created_at', '=', date("Y"))->count();
-        } else {
-            return User::where('country_id', $request->country)->whereYear('created_at', '=', $request->year_f)->count();
-        }
+        // DB::enableQueryLog(); // Enable query log
+        return User::where('country_id', $request->country)->count();
+        // dd(DB::getQueryLog()); // Show results of log
+
+        // return $request->all();
+        // if (empty($request->country)) {
+        //     return User::where('country_id', Auth::user()->country_id)->whereYear('created_at', '=', date("Y"))->count();
+        // } else {
+        //     return User::where('country_id', $request->country)->whereYear('created_at', '=', $request->year_f)->count();
+        // }
     }
 
     public function getShipmentsCount(Request $request)
@@ -48,7 +54,7 @@ class PermissionController extends Controller
         }
     }
 
-// Dashboard
+    // Dashboard
     public function delayedShipmentCount(Request $request)
     {
         if (empty($request->country)) {

@@ -32,8 +32,8 @@ Route::group([
         Route::get('user', 'AuthController@user');
     });
 });
-Route::post('apiSearch/{search}', 'api\ShipmentController@apiSearch')->name('apiSearch');
-Route::resource('status', 'StatusController');
+Route::get('apiSearch/{search}', 'api\ShipmentController@apiSearch')->name('apiSearch');
+Route::resource('status', 'api\StatusController');
 Route::any('/woocommerce', 'WoocommerceController@woocommerce')->name('woocommerce');
 
 Route::group([

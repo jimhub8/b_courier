@@ -18,8 +18,9 @@ class ClientScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $user = Auth::user();
-        if ($user->hasRole('Client')) {
+        // $user = Auth::user();
+
+        if (Auth::guard('clients')->check()) {
             return $builder->where('client_id', $user->id);
         }
     }

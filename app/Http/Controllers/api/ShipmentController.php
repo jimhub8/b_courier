@@ -8,6 +8,8 @@ use App\Http\Resources\UserResource;
 use App\Notifications\ShipmentNoty;
 use App\Pincode;
 use App\Product;
+use App\Scopes\ClientScope;
+use App\Scopes\ShipmentScope;
 use App\Shipment;
 use App\User;
 use Illuminate\Http\Request;
@@ -375,12 +377,18 @@ class ShipmentController extends Controller
 
     public function glSearch(Request $request)
     {
-        // return $request->all();
+        //  return $request->all();
         $search = $request->search;
         return Shipment::where('bar_code', 'LIKE', "%{$search}%")
             ->orwhere('client_phone', 'LIKE', "%{$search}%")
             ->orwhere('client_email', 'LIKE', "%{$search}%")
             ->orwhere('client_name', 'LIKE', "%{$search}%")->take(500)->get();
+    }
+
+    public function apiSearch($search)
+    {
+        return Shipment::withoutGlobalScope(ShipmentScope::class, ClientScope::class)->where('bar_code', 'LIKE', "%{$search}%")->paginate();
+
     }
 
 }
