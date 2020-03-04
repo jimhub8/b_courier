@@ -139,7 +139,8 @@ class ShipmentController extends Controller
         $user = User::find($request->client);
         if ($request->file('shipment')) {
             $path = $request->file('shipment')->getRealPath();
-            $data = Excel::load($path, function ($reader) { })->get();
+            $data = Excel::load($path, function ($reader) {
+            })->get();
 
             if (!empty($data) && $data->count()) {
                 foreach ($data->toArray() as $row) {
@@ -220,104 +221,110 @@ class ShipmentController extends Controller
         //     'form.to_city' =>'required',
         // ]);
 
+        $order_exists = Shipment::where('client_phone', $request->form['client_phone'])
+            ->where('client_email', $request->form['client_email'])
+            ->where('client_name', $request->form['client_name'])
+            ->exists();
+        if (!$order_exists) {
+            $shipment = new Shipment;
+            if (!empty($products)) {
+                $products = collect($request->form['products'])->transform(function ($product) {
+                    $product['total'] = $product['quantity'] * $product['price'];
+                    $product['user_id'] = Auth::id();
+                    return new Product($product);
+                });
 
+                $shipment->sub_total = $products->sum('total');
+                // return $products;
+            }
+            if ($request->selectCl == []) {
+                $shipment->client_id = null;
+            } else {
+                $shipment->client_id = $request->selectCl['id'];
+            }
+            if ($request->selectD == []) {
+                $shipment->driver = '';
+            } else {
+                $shipment->driver = $request->selectD['id'];
+            }
 
-        $shipment = new Shipment;
-        if (!empty($products)) {
-            $products = collect($request->form['products'])->transform(function ($product) {
-                $product['total'] = $product['quantity'] * $product['price'];
-                $product['user_id'] = Auth::id();
-                return new Product($product);
-            });
+            if ($request->selectB == []) {
+                $shipment->branch_id = Auth::user()->branch_id;
+            } else {
+                $shipment->branch_id = $request->selectB['id'];
+            }
+            if ($request->form['bar_code'] == '') {
+                // $last_id = $this->getLastId() + 1;
+                // if ($last_id <= 9) {
+                //     $bar_code = 'boxleo_00000' . $last_id;
+                // } elseif ($last_id <= 99) {
+                //     $bar_code = 'boxleo_0000' . $last_id;
+                // } elseif ($last_id <= 999) {
+                //     $bar_code = 'boxleo_000' . $last_id;
+                // } elseif ($last_id <= 9999) {
+                //     $bar_code = 'boxleo_00' . $last_id;
+                // } elseif ($last_id <= 99999) {
+                //     $bar_code = 'boxleo_0' . $last_id;
+                // } else {
+                //     $bar_code = 'boxleo_' . $last_id;
+                // }
+                // // dd($bar_code);
+                // $shipment->bar_code = $bar_code;
+                // $shipment->airway_bill_no = $bar_code;
+                $bar_code = new AutoGenerate;
+                // dd($bar_code->airwaybill_no());
+                $shipment->bar_code = $bar_code->airwaybill_no();
+                $shipment->airway_bill_no = $bar_code->airwaybill_no();
+            } else {
+                $shipment->bar_code = $request->form['bar_code'];
+                $shipment->airway_bill_no = $request->form['bar_code'];
+            }
 
-            $shipment->sub_total = $products->sum('total');
-            // return $products;
-        }
-        if ($request->selectCl == []) {
-            $shipment->client_id = null;
+            $shipment->client_name = $request->form['client_name'];
+            $shipment->client_phone = $request->form['client_phone'];
+            $shipment->client_email = $request->form['client_email'];
+            $shipment->client_address = $request->form['client_address'];
+            $shipment->client_city = $request->form['client_city'];
+            $shipment->shipment_type = $request->form['shipment_type'];
+            $shipment->payment = $request->form['payment'];
+            $shipment->insuarance_status = $request->form['insuarance_status'];
+            $shipment->status = $request->form['status'];
+            $shipment->booking_date = now();
+            $shipment->derivery_date = $request->form['derivery_date'];
+            $shipment->derivery_time = $request->form['derivery_time'];
+            $shipment->to_city = $request->form['to_city'];
+            $shipment->cod_amount = $request->form['cod_amount'];
+            // $shipment->receiver_name = $request->form['receiver_name'];
+            $shipment->from_city = $request->form['from_city'];
+            if ($request->model) {
+                $client = AppClient::find($request->model);
+                $shipment->sender_name = $client->name;
+                $shipment->sender_email = $client->email;
+                $shipment->sender_phone = $client->phone;
+                $shipment->sender_address = $client->address;
+                $shipment->sender_city = $client->city;
+            } else {
+                $shipment->sender_name = $request->form['sender_name'];
+                $shipment->sender_email = $request->form['sender_email'];
+                $shipment->sender_phone = $request->form['sender_phone'];
+                $shipment->sender_address = $request->form['sender_address'];
+                $shipment->sender_city = $request->form['sender_city'];
+            }
+            $shipment->country_id = Auth::user()->country_id;
+            $shipment->user_id = Auth::id();
+            $shipment->shipment_id = random_int(1000000, 9999999);
+            $users = $this->getAdmin();
+            // dd($shipment);
+            $shipment->save();
+            if (!empty($products)) {
+                $shipment->products()->saveMany($products);
+            }
+            $type = 'shipment';
+            // Notification::send($users, new ShipmentNoty($shipment, $type));
+            return $shipment;
         } else {
-            $shipment->client_id = $request->selectCl['id'];
+            abort(422, 'Order with similar details exists');
         }
-        if ($request->selectD == []) {
-            $shipment->driver = '';
-        } else {
-            $shipment->driver = $request->selectD['id'];
-        }
-
-        if ($request->selectB == []) {
-            $shipment->branch_id = Auth::user()->branch_id;
-        } else {
-            $shipment->branch_id = $request->selectB['id'];
-        }
-        if ($request->form['bar_code'] == '') {
-            // $last_id = $this->getLastId() + 1;
-            // if ($last_id <= 9) {
-            //     $bar_code = 'boxleo_00000' . $last_id;
-            // } elseif ($last_id <= 99) {
-            //     $bar_code = 'boxleo_0000' . $last_id;
-            // } elseif ($last_id <= 999) {
-            //     $bar_code = 'boxleo_000' . $last_id;
-            // } elseif ($last_id <= 9999) {
-            //     $bar_code = 'boxleo_00' . $last_id;
-            // } elseif ($last_id <= 99999) {
-            //     $bar_code = 'boxleo_0' . $last_id;
-            // } else {
-            //     $bar_code = 'boxleo_' . $last_id;
-            // }
-            // // dd($bar_code);
-            // $shipment->bar_code = $bar_code;
-            // $shipment->airway_bill_no = $bar_code;
-            $bar_code = new AutoGenerate;
-            // dd($bar_code->airwaybill_no());
-            $shipment->bar_code = $bar_code->airwaybill_no();
-            $shipment->airway_bill_no = $bar_code->airwaybill_no();
-        } else {
-            $shipment->bar_code = $request->form['bar_code'];
-            $shipment->airway_bill_no = $request->form['bar_code'];
-        }
-
-        $shipment->client_name = $request->form['client_name'];
-        $shipment->client_phone = $request->form['client_phone'];
-        $shipment->client_email = $request->form['client_email'];
-        $shipment->client_address = $request->form['client_address'];
-        $shipment->client_city = $request->form['client_city'];
-        $shipment->shipment_type = $request->form['shipment_type'];
-        $shipment->payment = $request->form['payment'];
-        $shipment->insuarance_status = $request->form['insuarance_status'];
-        $shipment->status = $request->form['status'];
-        $shipment->booking_date = now();
-        $shipment->derivery_date = $request->form['derivery_date'];
-        $shipment->derivery_time = $request->form['derivery_time'];
-        $shipment->to_city = $request->form['to_city'];
-        $shipment->cod_amount = $request->form['cod_amount'];
-        // $shipment->receiver_name = $request->form['receiver_name'];
-        $shipment->from_city = $request->form['from_city'];
-        if ($request->model) {
-            $client = AppClient::find($request->model);
-            $shipment->sender_name = $client->name;
-            $shipment->sender_email = $client->email;
-            $shipment->sender_phone = $client->phone;
-            $shipment->sender_address = $client->address;
-            $shipment->sender_city = $client->city;
-        } else {
-            $shipment->sender_name = $request->form['sender_name'];
-            $shipment->sender_email = $request->form['sender_email'];
-            $shipment->sender_phone = $request->form['sender_phone'];
-            $shipment->sender_address = $request->form['sender_address'];
-            $shipment->sender_city = $request->form['sender_city'];
-        }
-        $shipment->country_id = Auth::user()->country_id;
-        $shipment->user_id = Auth::id();
-        $shipment->shipment_id = random_int(1000000, 9999999);
-        $users = $this->getAdmin();
-        // dd($shipment);
-        $shipment->save();
-        if (!empty($products)) {
-            $shipment->products()->saveMany($products);
-        }
-        $type = 'shipment';
-        // Notification::send($users, new ShipmentNoty($shipment, $type));
-        return $shipment;
     }
 
     public function failsafe()

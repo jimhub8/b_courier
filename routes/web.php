@@ -69,6 +69,7 @@ Route::get('/passport', function () {
 // Route::get('/map', function () {
 // 	return App\User::take(100)->get();
 // });
+Route::get('/woo_orders', 'WoocommerceController@woo_orders')->name('woo_orders');
 
 Route::get('/', function () {
 	return redirect('login');
@@ -86,7 +87,6 @@ Route::group(['middleware' => ['auth']], function () {
 		$shipments = (Shipment::whereBetween('created_at', [$today->subMonth(1), $today->addMonth(1)])->get());
 		return view('home', compact('shipments'));
     });
-    Route::get('/woo_orders', 'WoocommerceController@woo_orders')->name('woo_orders');
 
 	Route::get('/screen', 'ScreenController@screen')->name('screen');
 	Route::get('/screen_chart', 'ScreenController@screen_chart')->name('screen_chart');

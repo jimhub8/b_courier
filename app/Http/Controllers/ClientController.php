@@ -51,7 +51,7 @@ class ClientController extends Controller
         $user->start_day = $request->start_day;
         $user->show_on = $request->show_on;
         $user->activation_token = str_random(60);
-        // $user->save();
+        $user->save();
         $create_user = $user;
         if ($request->send_email) {
             $create_user->notify(new ClientNotification($create_user, $password));

@@ -18,10 +18,11 @@ class ShipmentScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        // $user = Auth::user();
-        // if (!$user->hasRole('Client')) {
+        $user_loged = Auth::guard('web')->check();
+        if ($user_loged) {
+            $user = Auth::user();
             $country_id = Auth::user()->country_id;
             return $builder->where('country_id', $country_id);
-        // }
+        }
     }
 }
