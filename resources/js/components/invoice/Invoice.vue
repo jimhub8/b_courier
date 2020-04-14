@@ -52,6 +52,7 @@
                                     <th scope="col">Quantity</th>
                                     <!-- <th scope="col">Cod</th> -->
                                     <th scope="col">Amount</th>
+                                    <th scope="col">Commission</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,6 +65,7 @@
                                     </td>
                                     <td style="text-align: left;">{{ item.amount_ordered }}</td>
                                     <td style="text-align: left;">{{ item.cod_amount }}</td>
+                                    <td style="text-align: left;">{{ item.cod_amount * 3/100 }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -77,6 +79,10 @@
                                 <tr>
                                     <td colspan="4"><b>Vat</b></td>
                                     <td colspan="2"><b>KES {{ invoice_data.count['vat'] }}</b></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"><b>Commission</b></td>
+                                    <td colspan="2"><b>KES {{ invoice_data.count['sub_total'] * 3/100 }}</b></td>
                                 </tr>
                                 <tr>
                                     <td colspan="4"><b>Total</b></td>

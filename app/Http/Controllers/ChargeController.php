@@ -6,7 +6,7 @@ use App\Charge;
 use App\Shipment;
 use App\Town;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class ChargeController extends Controller
 {
@@ -25,14 +25,16 @@ class ChargeController extends Controller
 		// 	'form.town_name' => 'required',
 		// ]);
         // return $request->all();
-        $charges = $request->form['charges'];
-        $town = $request->schedule['town_name'];
+        $charges = $request->charges;
+        $town = $request->town_name;
         $vat = $charges * 0.16;
         // $request->schedule['id'];
-        $total = ($charges * 0.16) + $charges;
+        $total = ceil(($charges * 0.16) + $charges);
+        // dd($total, ($charges * 0.16) + $charges);
+        $town_id = Town::where('town_name', $town)->first('id');
         $charge = Charge::updateOrCreate(
             ['town' => $town],
-            ['charge' => $charges, 'total' => $total, 'vat' => $vat, 'user_id' => Auth::id(), 'town_id' => $request->schedule['id']]
+            ['charge' => $charges, 'total' => $total, 'vat' => $vat, 'user_id' => Auth::id(), 'town_id' => $town_id->id]
         );
         return $charge;
     }
@@ -46,6 +48,17 @@ class ChargeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $charges = $request->charges;
+        $town = $request->town_name;
+        $vat = $charges * 0.16;
+        // $request->schedule['id'];
+        $total = ceil(($charges * 0.16) + $charges);
+        // dd($total, ($charges * 0.16) + $charges);
+        $charge = Charge::updateOrCreate(
+            ['town' => $town],
+            ['charge' => $charges, 'total' => $total, 'vat' => $vat, 'user_id' => Auth::id(), 'town_id' => $request->schedule['id']]
+        );
+        return $charge;
         // return $request->all();
         $charge = Charge::find($id);
         $town_name = Town::find($request->town_id);
@@ -53,9 +66,8 @@ class ChargeController extends Controller
         $charge->town = $town_name->town_name;
         $charge->town_id = $request->id;
         $charge->charge = $request->charge;
-        $charge->total = $request->total;
+        $charge->total = ceil($request->total);
         $charge->vat = $request->vat;
-        $charge->user_id = Auth::id();
         $charge->save();
         return $charge;
     }

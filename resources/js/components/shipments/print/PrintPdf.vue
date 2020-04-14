@@ -2,19 +2,23 @@
 <div id="home" class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card card-body">
-                <div class="form-group">
-                    <v-layout row>
-                        <v-flex xs12 sm5 offset-sm1>
-                            <v-text-field v-model="form.start_date" :type="'date'" color="blue darken-2" label="Start Date" required></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm5 offset-sm1>
-                            <v-text-field v-model="form.end_date" :type="'date'" color="blue darken-2" label="End Date" required></v-text-field>
-                        </v-flex>
-                    </v-layout>
+            <form action="/getScheduled" method="post" target="_blank">
+                <div class="card card-body">
+                    <div class="form-group">
+                        <v-layout row>
+                                    <input type="hidden" name="_token" :value="csrf">
+                            <v-flex xs12 sm5 offset-sm1>
+                                <v-text-field name="start_date" :type="'date'" color="blue darken-2" label="Start Date" required></v-text-field>
+                            </v-flex>
+                            <v-flex xs12 sm5 offset-sm1>
+                                <v-text-field name="end_date" :type="'date'" color="blue darken-2" label="End Date" required></v-text-field>
+                            </v-flex>
+                        </v-layout>
+                    </div>
+                    <v-btn raised color="primary" type="submit" :disabled="loading" :loading="loading">Download PDF</v-btn>
                 </div>
-                <v-btn raised color="primary" @click="getScheduled" :disabled="loading" :loading="loading">Download PDF</v-btn>
-            </div>
+            </form>
+
         </div>
     </div>
 </div>
@@ -31,6 +35,10 @@ export default {
     },
     data() {
         return {
+
+            csrf: document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
             name: "",
             errors: [],
             Scheduled: [],

@@ -38,6 +38,10 @@ class ShipmentController extends Controller
     // }
     public function getShipments()
     {
+        // $ship_date = new AutoGenerate;
+        // $client = AppClient::find(1);
+        // // dd($client)
+        // return $ship_date->airwaybill_no($client);
         if (Auth::user()->hasRole('Client')) {
             return Shipment::where('client_id', Auth::id())->take(500)->orderBy('id', 'desc')->get();
         } else {
@@ -253,6 +257,22 @@ class ShipmentController extends Controller
             } else {
                 $shipment->branch_id = $request->selectB['id'];
             }
+            if ($request->model) {
+                $client = AppClient::find($request->model);
+                $shipment->client_id = $request->model;
+                $shipment->sender_name = $client->name;
+                $shipment->sender_email = $client->email;
+                $shipment->sender_phone = $client->phone;
+                $shipment->sender_address = $client->address;
+                $shipment->sender_city = $client->city;
+            } else {
+                $client = AppClient::where('email', $request->form['sender_email'])->first();
+                $shipment->sender_name = $request->form['sender_name'];
+                $shipment->sender_email = $request->form['sender_email'];
+                $shipment->sender_phone = $request->form['sender_phone'];
+                $shipment->sender_address = $request->form['sender_address'];
+                $shipment->sender_city = $request->form['sender_city'];
+            }
             if ($request->form['bar_code'] == '') {
                 // $last_id = $this->getLastId() + 1;
                 // if ($last_id <= 9) {
@@ -273,8 +293,8 @@ class ShipmentController extends Controller
                 // $shipment->airway_bill_no = $bar_code;
                 $bar_code = new AutoGenerate;
                 // dd($bar_code->airwaybill_no());
-                $shipment->bar_code = $bar_code->airwaybill_no();
-                $shipment->airway_bill_no = $bar_code->airwaybill_no();
+                $shipment->bar_code = $bar_code->airwaybill_no($client);
+                $shipment->airway_bill_no = $shipment->bar_code;
             } else {
                 $shipment->bar_code = $request->form['bar_code'];
                 $shipment->airway_bill_no = $request->form['bar_code'];
@@ -296,20 +316,7 @@ class ShipmentController extends Controller
             $shipment->cod_amount = $request->form['cod_amount'];
             // $shipment->receiver_name = $request->form['receiver_name'];
             $shipment->from_city = $request->form['from_city'];
-            if ($request->model) {
-                $client = AppClient::find($request->model);
-                $shipment->sender_name = $client->name;
-                $shipment->sender_email = $client->email;
-                $shipment->sender_phone = $client->phone;
-                $shipment->sender_address = $client->address;
-                $shipment->sender_city = $client->city;
-            } else {
-                $shipment->sender_name = $request->form['sender_name'];
-                $shipment->sender_email = $request->form['sender_email'];
-                $shipment->sender_phone = $request->form['sender_phone'];
-                $shipment->sender_address = $request->form['sender_address'];
-                $shipment->sender_city = $request->form['sender_city'];
-            }
+
             $shipment->country_id = Auth::user()->country_id;
             $shipment->user_id = Auth::id();
             $shipment->shipment_id = random_int(1000000, 9999999);
@@ -921,41 +928,6 @@ class ShipmentController extends Controller
             return Shipment::latest()->take(500)->skip($start)->get();
         }
         // return Shipment::where('country_id', Auth::user()->country_id)->latest()->skip($request->end)->take(500)->get();
-    }
-
-    public function getShipSingle($id)
-    {
-        $country = Auth::user()->country_;
-        $country_logo = $country->image;
-        // $path = Storage::disk('public')->path($country->image);
-        // $country_logo = 'data:image/png;base64,' . base64_encode(file_get_contents($path));
-        // $data = (Storage::get($country_logo));
-
-        // dd($data);
-        // dd('data:image/png;base64,' . DNS1D::getBarcodePNG("4", "C39+",3,33,array(1,1,1)));
-        $dispatcher = Shipment::getEventDispatcher();
-        // disabling the events
-        Shipment::unsetEventDispatcher();
-        $shipments = Shipment::where('id', $id)->get();
-        $shipments->transform(function ($shipment) {
-            // dd(DNS1D::getBarcodeSVG("4445645656", "C39"));
-            $length = strlen($shipment->bar_code);
-            if ($length > 10) {
-                // $cut = $length - 10;
-                $bar_code_str = substr($shipment->bar_code, '-10');
-            } else {
-                $bar_code_str = $shipment->bar_code;
-            }
-            $bar_code = 'data:image/png;base64,' . DNS1D::getBarcodePNG($bar_code_str, "C39");
-            $shipment->barcode = $bar_code;
-            // $shipment->country_logo = $country_logo;
-            return $shipment;
-        });
-        $s_update = Shipment::find($id);
-        $s_update->printed_at = now();
-        $s_update->save();
-        Shipment::setEventDispatcher($dispatcher);
-        return $shipments[0];
     }
 
     public function send_sms($phone, $message)

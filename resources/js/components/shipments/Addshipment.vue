@@ -294,7 +294,7 @@
                                                 <v-select :items="riders" v-model="selectD" label="Select Driver" single-line item-text="name" item-value="id" return-object></v-select>
                                             </v-flex>
                                             <v-flex xs12 sm4>
-                                                <v-select :items="AllBranches" v-model="selectB" label="Select Branch" single-line item-text="branch_name" item-value="id" return-object></v-select>
+                                                <v-select :items="branches" v-model="selectB" label="Select Branch" single-line item-text="branch_name" item-value="id" return-object></v-select>
                                             </v-flex>
 
                                             <v-flex xs12 sm4>
@@ -342,7 +342,7 @@
 <script>
 import VueBarcode from "vue-barcode";
 export default {
-    props: ["user", 'role', 'Allcustomer', 'AllBranches'],
+    props: ["user", 'role', 'Allcustomer'],
     components: {
         barcode: VueBarcode
     },
@@ -506,9 +506,11 @@ export default {
                 return carry + parseFloat(product.price);
             }, 0);
         },
-
         riders() {
             return this.$store.getters.riders
+        },
+        branches() {
+            return this.$store.getters.branches
         },
     },
 };

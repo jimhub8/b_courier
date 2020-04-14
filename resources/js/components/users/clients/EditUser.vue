@@ -42,6 +42,15 @@
                                         </select>
                                         <small class="has-text-danger" v-if="errors.countryList">{{ errors.countryList[0] }}</small>
                                     </div>
+                                    <v-flex xs12 sm6>
+                                        <v-text-field v-model="form.waybill_count_start" color="blue darken-2" label="Waybill count start" required></v-text-field>
+                                        <small class="has-text-danger" v-if="errors.waybill_count_start">{{ errors.waybill_count_start[0] }}</small>
+                                    </v-flex>
+
+                                    <v-flex xs12 sm6>
+                                        <v-text-field v-model="form.waybill_count_end" color="blue darken-2" label="Waybill count end" required></v-text-field>
+                                        <small class="has-text-danger" v-if="errors.waybill_count_end">{{ errors.waybill_count_end[0] }}</small>
+                                    </v-flex>
                                     <!-- <div class="form-group col-md-6">
                                         <label for=""> Report start day</label>
                                         <el-select v-model="form.start_day" filterable clearable placeholder="Select a day" style="width:100%">

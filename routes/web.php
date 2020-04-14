@@ -54,8 +54,11 @@ Route::any('confirmation', 'SafaricomController@confirmation')->name('confirmati
 Route::any('register_url', 'SafaricomController@register_url')->name('register_url');
 Route::any('validation', 'SafaricomController@validation')->name('validation');
 
-Route::get('scheduler', function () {
-	\Illuminate\Support\Facades\Artisan::call('schedule:run');
+
+Route::get('waybill_download', 'DispatchSheetController@waybill_download')->name('waybill_download');
+
+Route::get('waybill', function () {
+	return view('waybill.index');
 });
 	// Socialite
 Route::get('login/{service}', 'Auth\LoginController@redirectToProvider');
@@ -78,10 +81,20 @@ Route::get('signup/activate/{token}', 'AuthController@signupActivate');
 
 Route::get('/google_drive', 'GoogledriveController@google_drive')->name('google_drive');
 Route::get('/google_s', 'GoogledriveController@google_s')->name('google_s');
+Route::resource('clients', 'ClientController');
+Route::get('/client/login', 'ClientController@showClientLoginForm');
+Route::post('/client/login', 'ClientController@clientLogin');
+
+
+
+Route::group(['middleware' => ['auth:clients']], function () {
+    Route::get('/client', 'ClientController@client')->name('client');
+});
 
 Auth::routes();
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['authcheck']], function () {
+    // Route::group(['middleware' => ['auth']], function () {
 	Route::get('/testSS', function () {
 		$today = Carbon::today();
 		$shipments = (Shipment::whereBetween('created_at', [$today->subMonth(1), $today->addMonth(1)])->get());
@@ -138,7 +151,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('assDriver/{id}', 'ShipmentController@assDriver')->name('assDriver');
 	// Route::post('filterShipment', 'ShipmentController@filterShipment')->name('filterShipment');
 	Route::post('betweenShipments', 'ShipmentController@betweenShipments')->name('betweenShipments');
-	Route::post('getShipSingle/{id}', 'ShipmentController@getShipSingle')->name('getShipSingle');
+	Route::post('getShipSingle/{id}', 'DownloadController@getShipSingle')->name('getShipSingle');
 	Route::post('getshipD/{id}', 'ShipmentController@getshipD')->name('getshipD');
 	Route::any('updateCancelled', 'ShipmentController@updateCancelled')->name('updateCancelled');
 	Route::get('getShipStatus/{id}', 'ShipmentController@getShipStatus')->name('getShipStatus');
@@ -377,7 +390,7 @@ Route::group(['middleware' => ['auth']], function () {
 	// Route::get('getDelStatuses', 'DelStatusController@getDelStatuses')->name('getDelStatuses');
 	Route::get('getStat', 'StatusController@getStat')->name('getStat');
 	Route::get('scheduled', 'StatusController@scheduled')->name('scheduled');
-	Route::post('getScheduled', 'StatusController@getScheduled')->name('getScheduled');
+	Route::post('getScheduled', 'DownloadController@getScheduled')->name('getScheduled');
 	Route::post('getStickers', 'StatusController@getStickers')->name('getStickers');
 	Route::get('getDeriveredA', 'StatusController@getDeriveredA')->name('getDeriveredA');
 	Route::post('customerS', 'StatusController@customerS')->name('customerS');

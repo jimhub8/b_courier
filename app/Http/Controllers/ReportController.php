@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Scopes\ShipmentScope;
 use App\Shipment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -102,8 +103,15 @@ class ReportController extends Controller
         $branch_id = $request->branch_id;
         $client = $request->client;
         $shipments = Shipment::setEagerLoads([]);
-        if (Auth::user()->hasPermissionTo('filter by country') && $request->country) {
-            $shipments = $shipments->withoutGlobalScope(ShipmentScope::class);
+        if (Auth::guard('clients')->check()) {
+            if ($request->country) {
+                $shipments = $shipments->withoutGlobalScope(ShipmentScope::class)->where('country_id', Auth::user()->country_id);
+            }
+        }
+        if (Auth::guard('web')->check()) {
+            if (Auth::user()->hasPermissionTo('filter by country') && $request->country) {
+                $shipments = $shipments->withoutGlobalScope(ShipmentScope::class)->where('country_id', Auth::user()->country_id);
+            }
         }
         if ($request->start_date && $request->end_date) {
             $start_date = Carbon::parse($request->start_date);

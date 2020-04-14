@@ -3,6 +3,17 @@
     <v-card>
         <v-card-title>
             Upload Excel Shipments
+            <a href="/storage/uploadfile.xls" style="margin-left: 100px;
+">
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                        <v-btn icon v-on="on" slot="activator" class="mx-0" color="primary">
+                            <i color="info" class="fas fa-file-excel"></i>
+                        </v-btn>
+                    </template>
+                    <span>Download upload file</span>
+                </v-tooltip>
+                </a>
         </v-card-title>
         <v-container grid-list-md>
             <v-card-text>

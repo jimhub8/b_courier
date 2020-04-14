@@ -14,7 +14,7 @@
             </el-select>
             <small class="has-text-danger" v-if="errors.status">{{ errors.status[0] }}</small>
             <div style="margin: 10px 0;"></div>
-            <div>
+            <div v-if="!user.is_client">
                 <label for="">Client</label>
                 <el-select v-model="status_report.client" multiple filterable remote reserve-keyword placeholder="type at least 3 characters" :remote-method="getClient" :loading="loading" style="width: 100%;">
                     <el-option v-for="item in clients" :key="item.id" :label="item.name" :value="item.id">
@@ -22,7 +22,7 @@
                 </el-select>
             </div>
             <div style="margin: 10px 0;"></div>
-            <div v-if="user.can['filter by country']">
+            <div v-if="user.can['filter by country'] || user.is_client">
                 <label for="">Country</label>
                 <el-select v-model="status_report.country" filterable clearable placeholder="Select Country" style="width: 100%;">
                     <el-option v-for="item in countries" :key="item.id" :label="item.country_name" :value="item.id">
@@ -44,16 +44,18 @@
                 <small class="has-text-danger" v-if="errors.end_date">{{ errors.end_date[0] }}</small>
             </div>
             <div style="margin: 10px 0;"></div>
-            <h2>Upload Date Between:</h2>
-            <div class="block">
-                <span class="demonstration" style="float: left">Start Date</span>
-                <el-date-picker v-model="status_report.Upstart_date" type="date" placeholder="Pick a day" style="width: 100%;">
-                </el-date-picker>
-            </div>
-            <div class="block">
-                <span class="demonstration" style="float: left">End Date</span>
-                <el-date-picker v-model="status_report.Upend_date" type="date" placeholder="Pick a day" style="width: 100%;">
-                </el-date-picker>
+            <div v-if="!user.is_client">
+                <h2>Upload Date Between:</h2>
+                <div class="block">
+                    <span class="demonstration" style="float: left">Start Date</span>
+                    <el-date-picker v-model="status_report.Upstart_date" type="date" placeholder="Pick a day" style="width: 100%;">
+                    </el-date-picker>
+                </div>
+                <div class="block">
+                    <span class="demonstration" style="float: left">End Date</span>
+                    <el-date-picker v-model="status_report.Upend_date" type="date" placeholder="Pick a day" style="width: 100%;">
+                    </el-date-picker>
+                </div>
             </div>
         </v-card-text>
         <VDivider />
@@ -138,7 +140,7 @@ export default {
             this.errors = [],
                 this.loading = true;
             this.form.search = query
-            axios.post('DelivReport', this.status_report).then((response) => {
+            axios.post('/DelivReport', this.status_report).then((response) => {
                 this.loading = false
                 this.delivery_data = response.data
                 if (response.data.length < 1) {

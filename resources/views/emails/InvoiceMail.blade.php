@@ -52,7 +52,7 @@
 |   |  |  Grand Total | {{$invoice->grand_total}} |
 |   |  |  VAT | {{$invoice->vat}} |
 @endcomponent
-{{-- 
+{{--
 <div class="panel panel-default col-md-12">
     <div class="panel-heading">
         <div class="clearfix">

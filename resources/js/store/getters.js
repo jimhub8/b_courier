@@ -33,4 +33,7 @@ export default {
     statuses(state) {
         return state.statuses
     },
+    branches(state) {
+        return state.branches
+    },
 }

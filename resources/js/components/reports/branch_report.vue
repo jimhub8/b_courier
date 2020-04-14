@@ -117,7 +117,7 @@ export default {
         getReport(query) {
             this.loading = true;
             this.form.search = query
-            axios.post('userDateExpo', this.branch_report).then((response) => {
+            axios.post('/userDateExpo', this.branch_report).then((response) => {
                 this.loading = false
                 this.branch_data = response.data
                 if (response.data.length < 1) {

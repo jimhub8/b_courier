@@ -7,7 +7,7 @@
         </VCardTitle>
         <VDivider />
         <v-card-text>
-            <div>
+            <div v-if="!user.is_client">
                 <label for="">Client</label>
                 <el-select v-model="client_report.client" multiple filterable remote reserve-keyword placeholder="type at least 3 characters" :remote-method="getClient" :loading="loading" style="width: 100%;">
                     <el-option v-for="item in clients" :key="item.id" :label="item.name" :value="item.id">
@@ -106,7 +106,7 @@ export default {
         getReport(query) {
             this.loading = true;
             this.form.search = query
-            axios.post('userDateExpo', this.client_report).then((response) => {
+            axios.post('/userDateExpo', this.client_report).then((response) => {
                 this.loading = false
                 this.client_data = response.data
                 if (response.data.length < 1) {

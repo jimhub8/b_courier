@@ -11,33 +11,40 @@
                 </v-flex>
             </v-layout> -->
             <v-layout wrap>
-                <v-flex xs4 sm4 style="margin-top: 40px;">
+                <v-flex xs4 sm4 style="margin-top: 40px;" v-if="!user.is_client">
                     <v-card>
-                        <myClientReport></myClientReport>
+                        <myClientReport :user="user"></myClientReport>
                     </v-card>
                 </v-flex>
 
                 <!-- <v-divider vertical></v-divider> -->
                 <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
-                        <mySReport :statuses="statuses"></mySReport>
+                        <mySReport :user="user" :countries="countries" :statuses="statuses"></mySReport>
                     </v-card>
                 </v-flex>
 
                 <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
-                        <myBranchReport :branches="branches" :statuses="statuses"></myBranchReport>
+                        <myBranchReport :user="user" :branches="branches" :statuses="statuses"></myBranchReport>
                     </v-card>
                 </v-flex>
                 <!-- <v-divider vertical></v-divider> -->
-                <v-flex xs4 sm4 style="margin-top: 140px;">
+                <v-flex xs4 sm4 style="margin-top: 140px;" v-if="!user.is_client">
                     <v-card>
-                        <myRiderReport></myRiderReport>
+                        <myRiderReport :user="user"></myRiderReport>
                     </v-card>
                 </v-flex>
-                <v-flex xs4 sm4 style="margin-top: 140px;">
+                <v-flex xs4 sm4 style="margin-top: 140px;" v-if="!user.is_client">
                     <v-card>
-                        <myDeliveryReport :countries="countries" :user="user" :statuses="statuses"></myDeliveryReport>
+                        <myDeliveryReport :user="user" :countries="countries" :statuses="statuses"></myDeliveryReport>
+                    </v-card>
+                </v-flex>
+
+
+                <v-flex xs4 sm4 style="margin-top: 40px;" v-else>
+                    <v-card>
+                        <myDeliveryReport :user="user" :countries="countries" :statuses="statuses"></myDeliveryReport>
                     </v-card>
                 </v-flex>
                 <!--

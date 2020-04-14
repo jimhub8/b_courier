@@ -68,24 +68,25 @@ class StatusController extends Controller
     public function getStatuses()
     {
         // return Status::select('name')->orderBy('name', 'ASC')->get();
-        $user = Auth::user();
-        if ($user->hasAllPermissions(['update delivered', 'update dispatched', 'update returned'])) {
-            return Status::select('name')->orderBy('name', 'ASC')->get();
-        } elseif ($user->hasAllPermissions(['update delivered', 'update dispatched'])) {
-            return Status::select('name')->where('name', '!=', 'Returned')->orderBy('name', 'ASC')->get();
-        } elseif ($user->hasAllPermissions(['update delivered', 'update returned'])) {
-            return Status::select('name')->where('name', '!=', 'Dispatched')->orderBy('name', 'ASC')->get();
-        } elseif ($user->hasAllPermissions(['update dispatched', 'update returned'])) {
-            return Status::select('name')->where('name', '!=', 'Delivered')->orderBy('name', 'ASC')->get();
-        } elseif ($user->hasAllPermissions('update delivered')) {
-            return Status::select('name')->where('name', '!=', 'Returned')->Where('name', '!=', 'Dispatched')->orderBy('name', 'ASC')->get();
-        } elseif ($user->hasAllPermissions('update returned')) {
-            return Status::select('name')->where('name', '!=', 'Delivered')->where('name', '!=', 'Dispatched')->orderBy('name', 'ASC')->get();
-        } elseif ($user->hasAllPermissions('update dispatched')) {
-            return Status::select('name')->where('name', '!=', 'Delivered')->where('name', '!=', 'Returned')->orderBy('name', 'ASC')->get();
-        } else {
-            return Status::select('name')->where('name', '!=', 'Delivered')->where('name', '!=', 'Returned')->where('name', '!=', 'Dispatched')->orderBy('name', 'ASC')->get();
-        }
+        // $user = Auth::user();
+        return Status::select('name')->get();
+        // if ($user->hasAllPermissions(['update delivered', 'update dispatched', 'update returned'])) {
+        //     return Status::select('name')->orderBy('name', 'ASC')->get();
+        // } elseif ($user->hasAllPermissions(['update delivered', 'update dispatched'])) {
+        //     return Status::select('name')->where('name', '!=', 'Returned')->orderBy('name', 'ASC')->get();
+        // } elseif ($user->hasAllPermissions(['update delivered', 'update returned'])) {
+        //     return Status::select('name')->where('name', '!=', 'Dispatched')->orderBy('name', 'ASC')->get();
+        // } elseif ($user->hasAllPermissions(['update dispatched', 'update returned'])) {
+        //     return Status::select('name')->where('name', '!=', 'Delivered')->orderBy('name', 'ASC')->get();
+        // } elseif ($user->hasAllPermissions('update delivered')) {
+        //     return Status::select('name')->where('name', '!=', 'Returned')->Where('name', '!=', 'Dispatched')->orderBy('name', 'ASC')->get();
+        // } elseif ($user->hasAllPermissions('update returned')) {
+        //     return Status::select('name')->where('name', '!=', 'Delivered')->where('name', '!=', 'Dispatched')->orderBy('name', 'ASC')->get();
+        // } elseif ($user->hasAllPermissions('update dispatched')) {
+        //     return Status::select('name')->where('name', '!=', 'Delivered')->where('name', '!=', 'Returned')->orderBy('name', 'ASC')->get();
+        // } else {
+        //     return Status::select('name')->where('name', '!=', 'Delivered')->where('name', '!=', 'Returned')->where('name', '!=', 'Dispatched')->orderBy('name', 'ASC')->get();
+        // }
     }
 
     public function getStat()
@@ -102,45 +103,6 @@ class StatusController extends Controller
         $date2 = new Carbon('tomorrow');
         $shipment = Shipment::setEagerLoads([])->where('status', 'Scheduled')->whereBetween('derivery_date', [$date1, $date2])->take(500)->get();
         return $shipment;
-    }
-
-    public function getScheduled(Request $request)
-    {
-        $dispatcher = Shipment::getEventDispatcher();
-        // disabling the events
-        Shipment::unsetEventDispatcher();
-        // return $request->all();
-        $print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->where('country_id', Auth::user()->country_id)->take(500)->latest()->get();
-        $id = [];
-        foreach ($print_shipment as $selectedItems) {
-            $id[] = $selectedItems['id'];
-        }
-        // $status = $request->form['status'];
-        // $derivery_time = $request->form['derivery_time'];
-        // $remark = $request->form['remark'];
-        // $derivery_date = $request->form['scheduled_date'];
-        // $shipment = Shipment::whereIn('id', $id)->update(['printed' => 1, 'printReceipt' => 1, 'printed_at' => now()]);
-        $print_shipment->transform(function ($shipment) {
-            // $length = strlen($shipment->bar_code);
-            // if ($length > 10) {
-            //     // $cut = $length - 10;
-            //     $bar_code_str = substr($shipment->bar_code, '-10');
-            // } else {
-            //     $bar_code_str = $shipment->bar_code;
-            // }
-            // $bar_code = 'data:image/png;base64,' . DNS1D::getBarcodePNG($bar_code_str, "C39");
-            // $shipment->barcode = $bar_code;
-            // // $shipment->country_logo = $country_logo;
-            // return $shipment;
-
-            // dd(DNS1D::getBarcodeSVG("4445645656", "C39"));
-            $bar_code = 'data:image/png;base64,' . DNS1D::getBarcodePNG($shipment->bar_code, "C39");
-            $shipment->barcode = $bar_code;
-            // $shipment->country_logo = $country_logo;
-            return $shipment;
-        });
-        Shipment::setEventDispatcher($dispatcher);
-        return $print_shipment;
     }
 
     public function getStickers(Request $request)
@@ -164,7 +126,6 @@ class StatusController extends Controller
 
     public function customerS(Request $request)
     {
-
     }
     // public function getDelStatuses()
     // {

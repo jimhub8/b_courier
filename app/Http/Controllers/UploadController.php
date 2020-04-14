@@ -123,7 +123,7 @@ class UploadController extends Controller
                 }
                 $order_data->speciial_instruction = $instructions;
             }
-            $order_data->client_email = $order['sender_mail'];
+            $order_data->client_email = (array_key_exists('product_name', $order)) ? $order['product_name'] : $order['sender_mail'];
             $order_data->client_phone = $order['phone'];
             $order_data->client_address = $order['address'];
             $order_data->client_city = (array_key_exists('city', $order)) ? $order['city'] : null;

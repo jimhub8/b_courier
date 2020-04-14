@@ -14,6 +14,7 @@ use App\Branch;
 use App\Client as AppClient;
 use App\Country;
 use App\models\Rider;
+use App\Notifications\UserNotification;
 use GuzzleHttp\Client;
 
 class UserController extends Controller
@@ -69,9 +70,10 @@ class UserController extends Controller
         $user->country_id = $request->countryList;
         $user->activation_token = str_random(60);
         $user->save();
-        $create_user = $user;
+        // $create_user = $user;
         $user->assignRole($request->role_id);
-        return;
+            $user->notify(new UserNotification($user, $password));
+            return;
         // $user->splice('password_hash');
         // return $user->makeHidden('password_hash')->toArray();
     }

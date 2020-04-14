@@ -85,6 +85,7 @@
                 <v-card-actions>
                     <v-btn flat @click="close">Close</v-btn>
                     <v-spacer></v-spacer>
+                    <v-btn flat @click="calcCrow" :loading="loading" :disabled="loading" color="primary">Distance</v-btn>
                     <v-btn flat @click="update" :loading="loading" :disabled="loading" color="primary">Update</v-btn>
                 </v-card-actions>
             </v-container>
@@ -232,7 +233,7 @@ export default {
             this.markers = [];
             this.showMap = true;
         },
-        calcCrow(lat1, lon1, lat2, lon2) {
+        calcCrow() {
             var dist = []
             for (let i = 0; i < this.markers.length; i++) {
                 const element = this.markers[i];

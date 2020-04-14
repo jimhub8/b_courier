@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\Notifications\ClientNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 
 class ClientController extends Controller
 {
@@ -27,6 +29,10 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
+
+        // if ($request->send_email) {
+        //     $create_user->notify(new ClientNotification($create_user, $password));
+        // }
         // return $request->all();
         $this->Validate($request, [
             'name' => 'required',
@@ -47,12 +53,16 @@ class ClientController extends Controller
         $user->address = $request->address;
         $user->city = $request->city;
         // $user->country_id = $request->countryList;
-        $user->end_day = $request->end_day;
-        $user->start_day = $request->start_day;
-        $user->show_on = $request->show_on;
+        // $user->end_day = $request->end_day;
+        // $user->start_day = $request->start_day;
+        // $user->show_on = $request->show_on;
+        // $user->waybill_prefix = ($request->waybill_prefix) ? $request->waybill_prefix : 'BL';
+        $user->waybill_count_start = ($request->waybill_count_start) ? $request->waybill_count_start : null;
+        $user->waybill_count_end = ($request->waybill_count_end) ? $request->waybill_count_end : null;
         $user->activation_token = str_random(60);
         $user->save();
         $create_user = $user;
+
         if ($request->send_email) {
             $create_user->notify(new ClientNotification($create_user, $password));
         }
@@ -107,9 +117,11 @@ class ClientController extends Controller
         $user->address = $request->address;
         $user->city = $request->city;
         $user->country_id = $request->countryList;
-        $user->end_day = $request->end_day;
-        $user->start_day = $request->start_day;
-        $user->show_on = $request->show_on;
+        // $user->end_day = $request->end_day;
+        // $user->start_day = $request->start_day;
+        // $user->show_on = $request->show_on;
+        $user->waybill_count_start = ($request->waybill_count_start) ? $request->waybill_count_start : null;
+        $user->waybill_count_end = ($request->waybill_count_end) ? $request->waybill_count_end : null;
         $user->save();
         // $create_user = $user;
         // $user->assignRole('Client');
@@ -210,4 +222,48 @@ class ClientController extends Controller
     {
         return Client::where('name', 'LIKE', "%{$search}%")->get();
     }
+
+
+    public function showClientLoginForm()
+    {
+        return view('auth.client.login', ['url' => 'client']);
+    }
+
+    public function clientLogin(Request $request)
+    {
+        $this->validate($request, [
+            'email'   => 'required|email',
+            'password' => 'required|min:6'
+        ]);
+
+        if (Auth::guard('clients')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+
+            return redirect()->intended('/client/#/Shipments');
+        }
+        return back()->withInput($request->only('email', 'remember'));
+    }
+    public function client()
+    {
+        $permissions = [];
+        foreach (Permission::all() as $permission) {
+            if (Auth::user()->can($permission->name)) {
+                $permissions[$permission->name] = true;
+            } else {
+                $permissions[$permission->name] = false;
+            }
+        }
+        $user = Auth::user();
+        // $country = Country::find($user->country_id);
+        // dd($country);
+        // $user->country_name = $country->country_name;
+        // $users->transform(function ($user, $key) {
+        //     $country = Country::find($user->country_id);
+        //     $user->country_name = $country->name;
+		// 	return $user;
+        // });
+        // dd(json_decode(json_encode((Auth::user()), false)));
+        $auth_user = array_prepend($user->toArray(), $permissions, 'can');
+        return view('welcome', compact('auth_user'));
+    }
 }
+

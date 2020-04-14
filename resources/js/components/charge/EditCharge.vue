@@ -16,18 +16,22 @@
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
                                     <v-flex xs12 sm6>
-                                        <v-select :items="AllTowns" v-model="charges.town_id" label="Select Town" single-line item-text="town_name" item-value="id" persistent-hint></v-select>
+                                        <!-- <v-select :items="AllTowns" v-model="charges.town_id" label="Select Town" single-line item-text="town_name" item-value="id" persistent-hint></v-select> -->
+                                        <el-select v-model="charges.town_name" placeholder="Select town" filterable clearable>
+                                            <el-option v-for="item in AllTowns" :key="item.id" :label="item.town_name" :value="item.town_name">
+                                            </el-option>
+                                        </el-select>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="charges.charge" :rules="rules.name" color="blue darken-2" label="Charges" required></v-text-field>
+                                        <v-text-field v-model="charges.charge" color="blue darken-2" label="Charges" required></v-text-field>
                                         <!-- <small class="has-text-danger" v-if="errors.charges">{{ errors.charges[0] }}</small> -->
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="charges.vat" :rules="rules.name" color="blue darken-2" label="VAT" required></v-text-field>
+                                        <v-text-field disabled v-model="getVat" color="blue darken-2" label="VAT" required></v-text-field>
                                         <!-- <small class="has-text-danger" v-if="errors.vat">{{ errors.vat[0] }}</small> -->
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="charges.total" :rules="rules.name" color="blue darken-2" label="Total" required></v-text-field>
+                                        <v-text-field disabled v-model="getTotal" color="blue darken-2" label="Total" required></v-text-field>
                                         <!-- <small class="has-text-danger" v-if="errors.total">{{ errors.total[0] }}</small> -->
                                     </v-flex>
                                 </v-layout>
@@ -102,6 +106,15 @@ export default {
                 this.loader = false
                 this.errors = error.response.data.errors
             })
+    },
+    computed: {
+        getVat() {
+            return parseInt(this.charges.charges) * parseFloat(0.16)
+        },
+        getTotal() {
+            return parseFloat(this.getVat) + parseInt(this.charges.charges)
+            // parseFloat
+        }
     },
 }
 </script>

@@ -12,8 +12,17 @@
                 <el-option v-for="item in statuses" :key="item.name" :label="item.name" :value="item.name">
                 </el-option>
             </el-select>
+
             <div style="margin: 10px 0;"></div>
             <div>
+                <label for="">Country</label>
+                <el-select v-model="status_report.country" filterable clearable placeholder="Select Country" style="width: 100%;">
+                    <el-option v-for="item in countries" :key="item.id" :label="item.country_name" :value="item.id">
+                    </el-option>
+                </el-select>
+            </div>
+            <div style="margin: 10px 0;"></div>
+            <div v-if="!user.is_client">
                 <label for="">Client</label>
                 <el-select v-model="status_report.client" multiple filterable remote reserve-keyword placeholder="type at least 3 characters" :remote-method="getClient" :loading="loading" style="width: 100%;">
                     <el-option v-for="item in clients" :key="item.id" :label="item.name" :value="item.id">
@@ -61,7 +70,7 @@
 
 <script>
 export default {
-    props: ['user', 'statuses'],
+    props: ['user', 'statuses', 'countries'],
     data() {
         return {
             form: {
@@ -116,7 +125,7 @@ export default {
         getReport(query) {
             this.loading = true;
             this.form.search = query
-            axios.post('status_report', this.status_report).then((response) => {
+            axios.post('/status_report', this.status_report).then((response) => {
                 this.loading = false
                 this.delivery_data = response.data
                 if (response.data.length < 1) {

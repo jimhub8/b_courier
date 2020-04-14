@@ -33,6 +33,9 @@ class CreateClientsTable extends Migration
 			$table->boolean('status')->nullable();
 			$table->boolean('active')->nullable();
 			$table->string('verifyToken')->nullable();
+			$table->integer('waybill_prefix')->default('BL');
+			$table->integer('waybill_count_start')->nullable();
+			$table->integer('waybill_count_end')->nullable();
 			$table->string('activation_token')->nullable();
 			$table->rememberToken();
 			$table->softDeletes();

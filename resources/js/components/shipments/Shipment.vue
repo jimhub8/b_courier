@@ -20,12 +20,12 @@
                     <v-card style="background: rgba(5, 117, 230, 0.16); padding: 10px 0;">
                         <v-layout wrap>
                             <v-flex xs4 sm2 v-if="user.can['filter by country']">
-                                <el-select v-model="form.country_id" clearable filterable placeholder="Select Country" @change="changeCat">
+                                <el-select v-model="form.country_id" clearable filterable placeholder="Select Country" @change="changeCat" v-if="user.is_admin">
                                     <el-option v-for="item in countries" :key="item.id" :label="item.country_name" :value="item.id">
                                     </el-option>
                                 </el-select>
                             </v-flex>
-                            <v-flex xs4 sm2 offset-sm1>
+                            <v-flex xs4 sm2 offset-sm1  v-if="user.is_admin">
                                 <el-select v-model="form.branch_id" clearable filterable placeholder="Select Branch">
                                     <el-option v-for="item in branches" :key="item.id" :label="item.branch_name" :value="item.id">
                                     </el-option>
@@ -38,7 +38,7 @@
                                     </el-option>
                                 </el-select>
                             </v-flex>
-                            <v-flex xs4 sm2 offset-sm1>
+                            <v-flex xs4 sm2 offset-sm1  v-if="user.is_admin">
                                 <el-select v-model="form.client_id" clearable filterable placeholder="Select Client">
                                     <el-option v-for="item in clients" :key="item.id" :label="item.name" :value="item.id">
                                     </el-option>
@@ -80,7 +80,7 @@
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
-                    <v-data-table :headers="headers" :items="shipments.data" :search="search" counter select-all class="elevation-1" v-model="selected" :loading="loading" :custom-sort="customSort">
+                    <v-data-table :headers="headers" :items="shipments.data" :search="search" counter select-all class="elevation-1" v-model="selected" :loading="loading" disable-initial-sort>
                         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
                         <template slot="items" slot-scope="props">
                             <td>
@@ -92,9 +92,9 @@
                             </td>
                             <td class="text-xs-right">{{ props.item.client_name }}</td>
                             <td class="text-xs-right">{{ props.item.client_phone }}</td>
-                            <td class="text-xs-right">{{ props.item.client_email }}</td>
                             <td class="text-xs-right">{{ props.item.client_address }}</td>
                             <td class="text-xs-right">{{ props.item.client_city }}</td>
+                            <td class="text-xs-right">{{ props.item.client_email }}</td>
                             <td class="text-xs-right">{{ props.item.amount_ordered }} | {{ props.item.cod_amount }}</td>
                             <td class="text-xs-right">{{ props.item.status }}</td>
                             <td class="text-xs-right">{{ props.item.derivery_date }}</td>
@@ -151,14 +151,21 @@
                                     </template>
                                     <span>Print</span>
                                 </v-tooltip>
-                                <v-tooltip bottom>
-                                    <template v-slot:activator="{ on }">
-                                        <v-btn icon v-on="on" class="mx-0" @click="showDetails(props.item)" slot="activator" v-if="user.can['single print'] && user.country_name === 'Kenya'">
-                                            <v-icon color="info darken-2" small>visibility</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <span>Print</span>
-                                </v-tooltip>
+
+                                <form :action="'/getShipSingle/' + props.item.id" method="post" target="_blank">
+                                    <input type="hidden" name="_token" :value="csrf">
+                                    <!-- <v-btn flat color="orange" type="submit">Logout other devices out</v-btn> -->
+
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn icon v-on="on" class="mx-0" slot="activator" v-if="user.can['single print'] && user.country_name === 'Kenya'" type="submit">
+                                                <v-icon color="info darken-2" small>visibility</v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span>Print</span>
+                                    </v-tooltip>
+                                </form>
+
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
                                         <v-btn icon v-on="on" class="mx-0" @click="UgshowDetails(props.item)" slot="activator" v-if="user.can['single print'] && user.country_name === 'Uganda'">
@@ -202,6 +209,7 @@
                     <v-btn color="success" raised style="float: right;" @click="assignBranch" v-if="user.can['assign']">Assign Branch</v-btn>
                 </div>
             </div>
+
             <!-- Data table -->
         </v-container>
     </v-content>
@@ -257,6 +265,9 @@ export default {
     },
     data() {
         return {
+            csrf: document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
             trackModel: false,
             chargeModal: false,
             printColor: "",
@@ -350,16 +361,16 @@ export default {
                     value: "client_phone"
                 },
                 {
-                    text: "Client Email",
-                    value: "client_email"
-                },
-                {
                     text: "Client Address",
                     value: "client_address"
                 },
                 {
                     text: "Client City",
                     value: "client_city"
+                },
+                {
+                    text: "Product",
+                    value: "client_email"
                 },
                 {
                     text: "Qty&COD",
@@ -735,15 +746,15 @@ export default {
                 this.errors = error.response.data.errors;
             });
     },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            if (vm.user.can["view shipments"]) {
-                next();
-            } else {
-                next("/unauthorized");
-            }
-        });
-    },
+    // beforeRouteEnter(to, from, next) {
+    //     next(vm => {
+    //         if (vm.user.can["view shipments"]) {
+    //             next();
+    //         } else {
+    //             next("/unauthorized");
+    //         }
+    //     });
+    // },
     computed: {
         shipments() {
             return this.$store.getters.shipments

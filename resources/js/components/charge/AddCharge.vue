@@ -5,7 +5,9 @@
             <v-card-title fixed>
                 <span class="headline">Add Charges</span>
                 <v-spacer></v-spacer>
-                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
+                <v-btn icon dark @click="close">
+                    <v-icon color="black">close</v-icon>
+                </v-btn>
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>
@@ -14,7 +16,11 @@
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
                                     <v-flex xs12 sm6>
-                                        <v-select :items="AllTowns" v-model="schedule" label="Select Town" single-line item-text="town_name" item-value="id" return-object persistent-hint></v-select>
+                                        <!-- <v-select :items="AllTowns" v-model="schedule" label="Select Town" single-line item-text="town_name" item-value="id" return-object persistent-hint></v-select> -->
+                                        <el-select v-model="form.town_name" placeholder="Select town" filterable clearable>
+                                            <el-option v-for="item in AllTowns" :key="item.id" :label="item.town_name" :value="item.town_name">
+                                            </el-option>
+                                        </el-select>
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.charges" color="blue darken-2" label="Charges" required></v-text-field>
@@ -72,21 +78,19 @@ export default {
     methods: {
         save() {
             this.loading = true
-            axios.post('/charges', {
-                form: this.$data.form,
-                schedule: this.$data.schedule
-            }).
+            axios.post('/charges', this.$data.form).
             then((response) => {
                     this.loading = false
                     console.log(response);
                     // this.close;
                     // this.resetForm();
                     this.$emit('alertRequest');
+                    eventBus.$emit('RefChargeEvent')
                     this.$parent.AllCharges.push(response.data)
                 })
                 .catch((error) => {
                     this.loading = false
-                    this.errors = error.response.data.errors
+                    // this.errors = error.response.data.errors
                 })
         },
         resetForm() {

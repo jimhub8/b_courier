@@ -115,8 +115,7 @@ margin-left: 60px !important;
                         </div>
                     </div>
                 </form>
-
-                <p style="margin-top: 13vh;">Don't have an account? <a href="/register">Get Started Now</a></p>
+                <p style="margin-top: 13vh;">Are you a client? <a href="/client/login">Login to your client account</a></p>
             </v-flex>
         </v-layout>
     </v-app>

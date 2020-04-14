@@ -151,6 +151,12 @@ export default {
     mounted() {
         this.loader = true;
         this.getCharges();
-    }
+    },
+    created() {
+        eventBus.$on('RefChargeEvent', data => {
+            this.getCharges();
+        })
+    },
+
 };
 </script>

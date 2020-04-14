@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\DispatchSheetExport;
 use App\Shipment;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
+use Milon\Barcode\DNS1D;
+use PDF;
 
 class DispatchSheetController extends Controller
 {
@@ -19,5 +19,13 @@ class DispatchSheetController extends Controller
     {
         // dd($search);
         return Shipment::where('bar_code', 'LIKE', "%{$search}%")->first();
+    }
+
+    public function waybill_download()
+    {
+        $bar_code = DNS1D::getBarcodeHTML("4445645656", "PHARMA2T",3,33);
+        $data = array('bar_code' => $bar_code);
+        $pdf = PDF::loadView('waybill.index', $data);
+        return $pdf->stream('waybill.pdf');
     }
 }

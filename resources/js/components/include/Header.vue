@@ -20,7 +20,7 @@
                 <template>
                     <v-card>
                         <!-- <v-card style="background: url('storage/ps/landS.jpg')"> -->
-                        <router-link to="/" class="v-list__tile v-list__tile--link">
+                        <router-link to="/" class="v-list__tile v-list__tile--link" v-if="user.is_admin">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">dashboard</i>
                             </div>
@@ -37,15 +37,7 @@
                                 </div>
                             </div>
               </router-link>-->
-                        <router-link to="/rinders" class="v-list__tile v-list__tile--link" v-for="roleR in user.roles" :key="roleR.id" v-if="roleR.name === 'Rider'">
-                            <div class="v-list__tile__action">
-                                <i aria-hidden="true" class="icon material-icons">local_shipping</i>
-                            </div>
-                            <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">My Shipments</div>
-                            </div>
-                        </router-link>
-                        <router-link to="/Shipments" class="v-list__tile v-list__tile--link" v-if="user.can['view shipments']">
+                        <router-link to="/Shipments" class="v-list__tile v-list__tile--link">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">local_shipping</i>
                             </div>
@@ -79,7 +71,7 @@
                                 </div>
                             </div>
                         </router-link>-->
-                        <router-link to="/profile" class="v-list__tile v-list__tile--link">
+                        <router-link to="/profile" class="v-list__tile v-list__tile--link"  v-if="user.is_admin">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">account_circle</i>
                             </div>
@@ -90,7 +82,7 @@
                         <!--  -->
                         <!--  -->
                         <!--  -->
-                        <router-link to="/reports" class="v-list__tile v-list__tile--link" v-if="user.can['view reports']">
+                        <router-link to="/reports" class="v-list__tile v-list__tile--link">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">book</i>
                             </div>
@@ -249,7 +241,7 @@
                                 <v-list-tile-action>
                                     <v-icon>business</v-icon>
                                 </v-list-tile-action>
-                                <v-list-tile-title>Finace</v-list-tile-title>
+                                <v-list-tile-title>Finance</v-list-tile-title>
                             </router-link>
                             <router-link to="/charges" class="v-list__tile theme--light" style="text-decoration: none" v-if="user.can['update charges']">
                                 <v-list-tile-action>
