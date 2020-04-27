@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 //  });
 
 
+Route::get('charges_download', 'DownloadController@charges_download')->name('charges_download');
 
 // API
 Route::get('/apilogin', function () {

@@ -93,7 +93,7 @@ class InvoiceController extends Controller
             }
         } else {
             // if ($request->client) {
-            $shipments = Shipment::whereBetween('created_at', $date_array)->get();
+            $shipments = Shipment::where('client_id', $request->client)->whereBetween('created_at', $date_array)->get();
             $sub_total = (int)Shipment::whereBetween('created_at', $date_array)->sum('cod_amount');
             $vat = (int)($sub_total * 16/100);
             $total = (int)$sub_total + (int)$vat;
@@ -105,7 +105,7 @@ class InvoiceController extends Controller
             //     $shipment->client = User::find($request->client);
             //     return $shipment;
             // });
-            $client = User::find($request->client);
+            // $client = User::find($request->client);
                 return array('shipment' => $shipments, 'client' => Auth::user(), 'count' => $count);
                 // return array('shipment' => $shipments, 'client' => $client);
             // return $shipments;

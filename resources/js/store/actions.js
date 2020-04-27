@@ -98,6 +98,30 @@ export default {
     },
 
 
+    getItem(context, payload) {
+        var model = payload.url
+        var update = payload.list
+        var id = payload.id
+        context.commit('loading', true)
+        axios.get(model + '/' + id).then((response) => {
+            context.commit('loading', false)
+            context.commit(update, response.data)
+        }).catch((error) => {
+            context.commit('loading', false)
+            if (error.response.status === 500) {
+                eventBus.$emit('errorEvent', error.response.statusText)
+                return
+            } else if (error.response.status === 401 || error.response.status === 409) {
+                eventBus.$emit('reloadRequest', error.response.statusText)
+            } else if (error.response.status === 422) {
+                eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                return
+            }
+            this.errors = error.response.data.errors
+        })
+    },
+
+
     searchItems(context, payload) {
         var model = payload.url
         var update_ = payload.list

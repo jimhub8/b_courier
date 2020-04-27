@@ -9,11 +9,13 @@ class AutoGenerate
     public function airwaybill_no($client)
     {
         $shipments = Shipment::withTrashed()->select('airway_bill_no')->where('client_id', $client->id)->orderBy('id', 'Desc')->first();
+        // dd($shipments);
         if ($shipments) {
             // dd($shipments);
             // dd('122');
             // $start_no = $client->waybill_count_start;
             $inv_arr = explode('BL', $shipments->airway_bill_no);
+            // dd($inv_arr);
             $inv_arr = (int) $inv_arr[1];
             // dd($inv_arr);
             // $id = ''.str_pad($product->id + 1, 8, $start_no, STR_PAD_LEFT);

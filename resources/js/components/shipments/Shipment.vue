@@ -18,47 +18,56 @@
                         </v-flex>
                     </v-layout>
                     <v-card style="background: rgba(5, 117, 230, 0.16); padding: 10px 0;">
-                        <v-layout wrap>
-                            <v-flex xs4 sm2 v-if="user.can['filter by country']">
-                                <el-select v-model="form.country_id" clearable filterable placeholder="Select Country" @change="changeCat" v-if="user.is_admin">
-                                    <el-option v-for="item in countries" :key="item.id" :label="item.country_name" :value="item.id">
-                                    </el-option>
-                                </el-select>
-                            </v-flex>
-                            <v-flex xs4 sm2 offset-sm1  v-if="user.is_admin">
-                                <el-select v-model="form.branch_id" clearable filterable placeholder="Select Branch">
-                                    <el-option v-for="item in branches" :key="item.id" :label="item.branch_name" :value="item.id">
-                                    </el-option>
-                                </el-select>
-                            </v-flex>
-                            <v-flex xs4 sm2 offset-sm1>
+                        <v-card-text>
 
-                                <el-select v-model="form.status" clearable filterable placeholder="Select Status">
-                                    <el-option v-for="item in statuses" :key="item.name" :label="item.name" :value="item.name">
-                                    </el-option>
-                                </el-select>
-                            </v-flex>
-                            <v-flex xs4 sm2 offset-sm1  v-if="user.is_admin">
-                                <el-select v-model="form.client_id" clearable filterable placeholder="Select Client">
-                                    <el-option v-for="item in clients" :key="item.id" :label="item.name" :value="item.id">
-                                    </el-option>
-                                </el-select>
-                            </v-flex>
-                            <!-- <v-spacer></v-spacer> -->
-                            <v-flex xs12 sm2>
-                                <v-text-field label="Start Date" v-model="form.start_date" color="blue darken-2" type="date" required></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm2 offset-sm1>
-                                <v-text-field label="End Date" v-model="form.end_date" color="blue darken-2" type="date" required></v-text-field>
-                            </v-flex>
-                            <!-- <v-spacer></v-spacer> -->
-                            <v-flex xs4 sm1>
-                                <v-btn raised color="info" @click="sortItem">Filter</v-btn>
-                            </v-flex>
-                            <v-flex xs4 sm1>
-                                <v-btn raised color="info" @click="filReset">Reset</v-btn>
-                            </v-flex>
-                        </v-layout>
+                            <v-layout wrap>
+                                <v-flex xs4 sm2 v-if="user.can['filter by country']">
+                                    <el-select v-model="form.country_id" clearable filterable placeholder="Select Country" @change="changeCat" v-if="user.is_admin">
+                                        <el-option v-for="item in countries" :key="item.id" :label="item.country_name" :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </v-flex>
+                                <v-flex xs4 sm2 offset-sm1 v-if="user.is_admin">
+                                    <el-select v-model="form.branch_id" clearable filterable placeholder="Select Branch">
+                                        <el-option v-for="item in branches" :key="item.id" :label="item.branch_name" :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </v-flex>
+                                <v-flex xs4 sm2 offset-sm1>
+
+                                    <el-select v-model="form.status" clearable filterable placeholder="Select Status">
+                                        <el-option v-for="item in statuses" :key="item.name" :label="item.name" :value="item.name">
+                                        </el-option>
+                                    </el-select>
+                                </v-flex>
+                                <v-flex xs4 sm2 offset-sm1 v-if="user.is_admin">
+                                    <el-select v-model="form.client_id" clearable filterable placeholder="Select Client">
+                                        <el-option v-for="item in clients" :key="item.id" :label="item.name" :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </v-flex>
+                                <!-- <v-spacer></v-spacer> -->
+                                <v-flex xs12 sm2>
+                                    <v-text-field label="Start Date" v-model="form.start_date" color="blue darken-2" type="date" required></v-text-field>
+                                </v-flex>
+                                <v-flex xs12 sm2 offset-sm1>
+                                    <v-text-field label="End Date" v-model="form.end_date" color="blue darken-2" type="date" required></v-text-field>
+                                </v-flex>
+
+                                <v-flex xs12 sm2 v-if="form.status == 'Scheduled'" offset-sm1>
+                                    <v-text-field label="Delivery Date Start" v-model="form.delivery_start_date" color="blue darken-2" type="date" required></v-text-field>
+                                </v-flex>
+                                <v-flex xs12 sm2 offset-sm1 v-if="form.status == 'Scheduled'">
+                                    <v-text-field label="Delivery Date End" v-model="form.delivery_end_date" color="blue darken-2" type="date" required></v-text-field>
+                                </v-flex>
+
+                            </v-layout>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn raised color="info" @click="sortItem">Filter</v-btn>
+                            <v-btn raised color="info" @click="filReset">Reset</v-btn>
+
+                        </v-card-actions>
                     </v-card>
                     <v-card-title>
                         <download-excel :data="shipments.data" :fields="json_fields">
@@ -340,6 +349,8 @@ export default {
             form: {
                 start_date: "",
                 end_date: "",
+                delivery_start_date: "",
+                delivery_end_date: "",
                 status: null,
                 country_id: null,
                 branch_id: null,
@@ -640,18 +651,15 @@ export default {
         },
 
         filReset() {
-            this.selectAss = {
-                Assigned: "All"
-            };
-            this.selectItem = {
-                name: "All"
-            };
-            this.selectCountry = {
-                country_id: "All",
-                id: "all"
-            };
-            this.getBranch()
-            this.form.start_date = this.form.end_date = "";
+            this.form = {
+                start_date: "",
+                end_date: "",
+                delivery_start_date: "",
+                delivery_end_date: "",
+                status: null,
+                country_id: null,
+                branch_id: null,
+            },
             this.sortItem();
         },
 
@@ -687,15 +695,25 @@ export default {
             this.$store.dispatch('searchItems', payload)
         },
         changeCat(item) {
-            console.log(item);
-            axios.get(`/country_branch/${item}`)
-                .then(response => {
-                    this.countries = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errors = error.response.data.errors;
-                });
+
+
+            var payload = {
+                url: '/country_branch',
+                list: 'updateBranchesList',
+                id: item,
+            }
+            this.$store.dispatch('getItem', payload)
+
+
+            // console.log(item);
+            // axios.get(`/country_branch/${item}`)
+            //     .then(response => {
+            //         this.countries = response.data;
+            //     })
+            //     .catch(error => {
+            //         console.log(error);
+            //         this.errors = error.response.data.errors;
+            //     });
         },
         getStatus() {
             var payload = {

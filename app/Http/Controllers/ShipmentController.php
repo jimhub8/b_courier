@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
-use App\Cancelled;
 use App\Client as AppClient;
 use App\models\AutoGenerate;
 use App\models\Rider;
-use App\Notifications\ShipmentNoty;
 use App\Product;
 use App\ScheduleLogs;
 use App\Shipment;
@@ -19,13 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
-use GuzzleHttp\Client;
-use Illuminate\Notifications\Notification;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
-use Milon\Barcode\DNS1D;
 
 // use App\Observers\BaseObserver;
 
@@ -214,16 +206,6 @@ class ShipmentController extends Controller
     public function store(Request $request)
     {
         // return $request->all();
-        // $this->Validate($request, [
-        //     'form.payment' =>'required',
-        //     'form.insuarance_status' =>'required',
-        //     'form.booking_date' =>'required|date',
-        //     'form.derivery_date' =>'required|date',
-        //     'form.bar_code' =>'required',
-        //     'form.derivery_time' =>'required',
-        //     'form.from_city' =>'required',
-        //     'form.to_city' =>'required',
-        // ]);
 
         $order_exists = Shipment::where('client_phone', $request->form['client_phone'])
             ->where('client_email', $request->form['client_email'])
@@ -336,12 +318,7 @@ class ShipmentController extends Controller
 
     public function failsafe()
     {
-        Shipment::query()->truncate();
-        // User::query()->truncate();
-        // // Role::query()->truncate();
-        // Permission::query()->truncate();
-        // return 'deleted';
-        // return view('failsafe');
+        // Shipment::query()->truncate();
     }
 
     /**
@@ -442,29 +419,7 @@ class ShipmentController extends Controller
      */
     public function destroy($id)
     {
-        $shipment = Shipment::find($id);
-        // try {
-        //     $client = new Client;
-        //     $request = $client->request('DELETE', env('API_URL') . '/api/order_delete' . $shipment->bar_code, [
-        //         'headers' => [
-        //             'Content-type' => 'application/json',
-        //             'Accept' => 'application/json',
-        //             'Authorization' => 'Bearer ' . $this->token_f(),
-        //         ],
-        //     ]);
-        //     Shipment::find($id)->delete();
-
-        //     return $response = $request->getBody()->getContents();
-        // } catch (\Exception $e) {
-        //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
-        //     $message = $e->getResponse()->getBody();
-        //     $code = $e->getResponse()->getStatusCode();
-        //     abort(422, $message);
-        //     if ($code == 401) {
-        //         abort(401);
-        //     }
-        //     return;
-        // }
+        $shipment = Shipment::find($id)->delete();
     }
 
     public function getAdmin()
@@ -488,72 +443,8 @@ class ShipmentController extends Controller
         // dd(UserResource::collection($admin));
     }
 
-    // public function update_status($data)
-    // {
-    //     // dd($request);
-    //     try {
-    //         $client = new Client;
-    //         $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
-    //             'headers' => [
-    //                 'Content-type' => 'application/json',
-    //                 'Accept' => 'application/json',
-    //                 'Authorization' => 'Bearer ' . $this->token_f(),
-    //             ],
-    //             'body' => json_encode([
-    //                 'data' => $data,
-    //             ])
-    //         ]);
-    //         // $response = $http->get(env('API_URL').'/api/getUsers');
-    //         return $response = $request->getBody()->getContents();
-    //     } catch (\Exception $e) {
-    //         \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
-    //         // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
-    //         // return $e->getMessage();
-    //         $message = $e->getResponse()->getBody();
-    //         $code = $e->getResponse()->getStatusCode();
-    //         if ($code == 401) {
-    //             abort(401);
-    //         }
-    //         return;
-    //         // $arrayName = array('error' => 'Error', 'message' => $message);
-    //         // dd($message);
-    //         abort(422, $message);
-    //         // return $e->getMessage();
-    //     }
-    // }
-
     public function updateStatus(Request $request, Shipment $shipment, $id)
     {
-        // try {
-        //     $client = new Client;
-        //     $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
-        //         'headers' => [
-        //             'Content-type' => 'application/json',
-        //             'Accept' => 'application/json',
-        //             'Authorization' => 'Bearer ' . $this->token_f(),
-        //         ],
-        //         'body' => json_encode([
-        //             'data' => $request->formobg,
-        //         ])
-        //     ]);
-        //     // $response = $http->get(env('API_URL').'/api/getUsers');
-        //     return $response = $request->getBody()->getContents();
-        // } catch (\Exception $e) {
-        //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
-        //     // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
-        //     // return $e->getMessage();
-        //     $message = $e->getResponse()->getBody();
-        //     $code = $e->getResponse()->getStatusCode();
-        //     if ($code == 401) {
-        //         abort(401);
-        //     }
-        //     // return;
-        //     // $arrayName = array('error' => 'Error', 'message' => $message);
-        //     // dd($message);
-        //     abort(422, $message);
-        //     // return $e->getMessage();
-        // }
-        // $this->update_status($request->formobg);
         $no = $request->formobg['client_phone'];
         $no_A = explode(' ', $no);
         $phone_no = $no_A[0];
@@ -591,34 +482,8 @@ class ShipmentController extends Controller
             $statusUpdate->branch_id = Auth::user()->branch_id;
             $statusUpdate->shipment_id = $id;
 
-            // $ip = $request->ip();
-            // $ip = '197.136.134.5';
-            // return view('home');
-            // $arr_ip = geoip()->getLocation($ip);
-            // // dd($arr_ip);
-            // $statusUpdate->ip = $arr_ip->ip;
-            // $statusUpdate->lat = $arr_ip->lat;
-            // $statusUpdate->lng = $arr_ip->lon;
-            // $statusUpdate->city = $arr_ip->city;
-            // $statusUpdate->state = $arr_ip->state;
-            // $statusUpdate->state_name = $arr_ip->state_name;
-            // return $statusUpdate;
-            // $this->shipmentUpdated($shipment);
             $statusUpdate->save();
         }
-        // return $shipment;
-        // $sms = new Sms;
-
-        // if ($request->formobg['status'] == 'Not picking') {
-        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
-        // } elseif ($request->formobg['status'] == 'Not available') {
-        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
-        // } elseif ($request->formobg['status'] == 'Delivered') {
-        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered. Incase of queries call +254207608777, +254207608778, +254207608779    ');
-        // } elseif ($request->formobg['status'] == 'Dispatched') {
-        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been dispatched to ' . $City . '  Incase of queries call +254207608777, +254207608778, +254207608779  ');
-        // }
-        // return $response;
     }
 
     public function shipmentUpdated($shipment)
@@ -669,35 +534,6 @@ class ShipmentController extends Controller
             $array_item = Arr::prepend($selectedItems, $status, 'status');
             // return $array_item;
 
-            // try {
-            //     $client = new Client;
-            //     $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
-            //         'headers' => [
-            //             'Content-type' => 'application/json',
-            //             'Accept' => 'application/json',
-            //             'Authorization' => 'Bearer ' . $this->token_f(),
-            //         ],
-            //         'body' => json_encode([
-            //             'data' => $array_item,
-            //         ])
-            //     ]);
-            //     // $response = $http->get(env('API_URL').'/api/getUsers');
-            //     return $response = $request->getBody()->getContents();
-            // } catch (\Exception $e) {
-            //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
-            //     // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
-            //     // return $e->getMessage();
-            //     $message = $e->getResponse()->getBody();
-            //     $code = $e->getResponse()->getStatusCode();
-            //     if ($code == 401) {
-            //         abort(401);
-            //     }
-            //     // $arrayName = array('error' => 'Error', 'message' => $message);
-            //     // dd($message);
-            //     abort(422, $message);
-            //     // return $e->getMessage();
-            // }
-            // $this->update_status($array_item);
             $id[] = $selectedItems['id'];
         }
         $status = $request->form['status'];
@@ -929,50 +765,6 @@ class ShipmentController extends Controller
         }
         // return Shipment::where('country_id', Auth::user()->country_id)->latest()->skip($request->end)->take(500)->get();
     }
-
-    public function send_sms($phone, $message)
-    {
-        return $phone;
-        // // dd($phone . '   ' . $message);
-        // // $phone = '254778301465';
-        $phone = '254731090832';
-        // $phone = '254706920275';
-        $sms = $message;
-        $senderID = 'Boxleo';
-
-        $login = 'Boxleo';
-        $password = 's12345';
-
-        $clientsmsID = rand(1000, 9999);
-
-        $xml_data = '<?xml version="1.0"?>
-		<smslist>
-			<sms>
-				<user>' . $login . '</user>
-				<password>' . $password . '</password>
-				<message>' . $sms . '</message>
-				<mobiles>' . $phone . '</mobiles>
-				<senderid>' . $senderID . '</senderid>
-				<clientsmsid>' . $clientsmsID . '</clientsmsid>
-			</sms>
-		</smslist>';
-
-        $URL = "http://messaging.advantasms.com/bulksms/sendsms.jsp?";
-
-        $ch = curl_init($URL);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/xml'));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "$xml_data");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        curl_close($ch);
-
-        return $phone;
-    }
-
     public function btwRefShipments(Request $request)
     {
         // return $request->all();

@@ -14,13 +14,22 @@
                             <!-- <v-spacer></v-spacer> -->
                             <v-tooltip bottom>
                                 <template v-slot:activator="{ on }">
-
                                     <v-btn v-on="on" slot="activator" icon class="mx-0" @click="getCharges">
                                         <v-icon small color="blue darken-2">refresh</v-icon>
                                     </v-btn>
                                 </template>
                                 <span>Refresh</span>
                             </v-tooltip>
+                            <a href="/charges_download" style="margin:0 20px;" target="_blank">
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" slot="activator" class="mx-0" color="primary">
+                                            <i color="info" class="fas fa-file-pdf"></i>
+                                        </v-btn>
+                                    </template>
+                                    <span>Download Charges PDF</span>
+                                </v-tooltip>
+                            </a>
                             <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                         </v-card-title>
                         <v-data-table :headers="headers" :items="AllCharges" class="elevation-1" :search="search" :loading="loading">

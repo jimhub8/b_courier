@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Charge;
 use App\Shipment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,7 +50,7 @@ class DownloadController extends Controller
         // $bar_code = DNS1D::getBarcodeHTML("4445645656", "PHARMA2T",3,33);
         // $data = array('bar_code' => $bar_code);
         $pdf = PDF::loadView('waybill.single', $data);
-        return $pdf->download($shipments[0]['bar_code']);
+        return $pdf->stream($shipments[0]['bar_code']);
     }
     public function getScheduled(Request $request)
     {
@@ -58,7 +59,7 @@ class DownloadController extends Controller
         // disabling the events
         Shipment::unsetEventDispatcher();
         // return $request->all();
-        $print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->where('country_id', Auth::user()->country_id)->take(500)->latest()->get();
+        $print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->where('country_id', Auth::user()->country_id)->take(200)->latest()->get();
         $id = [];
         foreach ($print_shipment as $selectedItems) {
             $id[] = $selectedItems['id'];
@@ -103,5 +104,15 @@ class DownloadController extends Controller
         $data = array('bar_code' => $bar_code);
         $pdf = PDF::loadView('waybill.index', $data);
         return $pdf->stream('waybill.pdf');
+    }
+
+
+    public function charges_download()
+    {
+        $data = Charge::all();
+        // dd($data);
+        $data = ['data' => $data];
+        $pdf = PDF::loadView('waybill.charges', $data);
+        return $pdf->download('charges.pdf');
     }
 }

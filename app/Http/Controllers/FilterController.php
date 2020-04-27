@@ -32,6 +32,14 @@ class FilterController extends Controller
                     $shipment_filter = $shipment_filter->whereBetween('created_at', $date_b);
                 }
             }
+            if ($request->status == "Scheduled" && ($request->delivery_start_date && $request->delivery_end_date)) {
+                $schedule_date = [
+                    'start_date' => $request->delivery_start_date,
+                    'end_date' => $request->delivery_end_date
+                ];
+                $shipment_filter = $shipment_filter->whereBetween('derivery_date', $schedule_date);
+                // dd($schedule_date);
+            }
 
             if ($request->status) {
                 $shipment_filter = $shipment_filter->where('status', $request->status);
@@ -74,6 +82,13 @@ class FilterController extends Controller
                 }
             }
 
+            if ($request->status == "Scheduled" && ($request->delivery_start_date && $request->delivery_end_date)) {
+                $schedule_date = [
+                    'start_date' => $request->delivery_start_date,
+                    'end_date' => $request->delivery_end_date
+                ];
+                $shipment_filter = $shipment_filter->whereBetween('derivery_date', $schedule_date);
+            }
             if ($request->status) {
                 $shipment_filter = $shipment_filter->where('status', $request->status);
             }
