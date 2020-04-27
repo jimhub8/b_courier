@@ -59,7 +59,7 @@ class DownloadController extends Controller
         // disabling the events
         Shipment::unsetEventDispatcher();
         // return $request->all();
-        $print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->where('country_id', Auth::user()->country_id)->take(200)->latest()->get();
+        $print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->where('country_id', Auth::user()->country_id)->take(80)->latest()->get();
         $id = [];
         foreach ($print_shipment as $selectedItems) {
             $id[] = $selectedItems['id'];

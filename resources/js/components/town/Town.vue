@@ -149,7 +149,7 @@ export default {
         },
         save() {
             this.loading = true
-            axios.patch(`/townes/${this.editedItem.id}`, this.$data.editedItem)
+            axios.patch(`/towns/${this.editedItem.id}`, this.$data.editedItem)
                 .then((response) => {
                     console.log(response);
                     // this.AllTowns.push(this.editedItem)
