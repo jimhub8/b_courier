@@ -84,12 +84,12 @@ class UploadController extends Controller
             // dd($order['delivery_date']);
             $order_data = new Shipment();
             // dd($order['phone'], $order['product_name'], $order["name_of_the_client"]);
-            $similar_order = Shipment::where('client_phone', $order['phone'])
-                ->where('client_email', $order['product_name'])
-                ->where('client_name', $order["name_of_the_client"])
-                ->exists();
+            // $similar_order = Shipment::where('client_phone', $order['phone'])
+            //     ->where('client_email', $order['product_name'])
+            //     ->where('client_name', $order["name_of_the_client"])
+            //     ->exists();
                 // dd($similar_order);
-            if (!$similar_order) {
+            // if (!$similar_order) {
                 $order_exists = Shipment::where('bar_code', $order["order_id"])->exists();
                 if (!$order_exists) {
                     // $order_data->order_id = $order["order_id"];
@@ -171,7 +171,7 @@ class UploadController extends Controller
                     // $order_data->country = $order->country;
                     $order_data->country_id = Auth::user()->country_id;
                     $order_data->save();
-                }
+                // }
             }
         }
         return redirect('/#/shipments');
