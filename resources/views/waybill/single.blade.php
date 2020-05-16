@@ -18,6 +18,7 @@
                           <tr>
                             <th scope="col">From</th>
                             <th scope="col">To</th>
+                            <th scope="col">City</th>
                             <th scope="col">Dispatch date</th>
                           </tr>
                         </thead>
@@ -25,6 +26,7 @@
                           <tr>
                             <td>{{ $shipments['sender_address'] }}</td>
                             <td>{{ $shipments['client_address'] }}</td>
+                            <td>{{ $shipments['client_city'] }}</td>
                             <td>{{ $shipments['derivery_date'] }}</td>
                           </tr>
                         </tbody>
