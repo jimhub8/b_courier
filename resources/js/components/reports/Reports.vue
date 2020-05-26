@@ -76,7 +76,7 @@
                         <v-divider></v-divider>
                         <download-excel :data="AllProd" :fields="json_fields" v-show="Pdown">
                             Export
-                            <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
+                            <img src="https://jimkiarie8.nyc3.digitaloceanspaces.com/boxleo/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
                         <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
                             {{ message }}

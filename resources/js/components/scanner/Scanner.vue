@@ -136,7 +136,7 @@
                 <v-divider></v-divider>
                 <!-- <download-excel :data="scanned_shipments" name="Dispatch Inbound.csv" :fields="json_fields" v-if="scanned_shipments.length > 0">
                         Export
-                        <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
+                        <img src="https://jimkiarie8.nyc3.digitaloceanspaces.com/boxleo/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                     </download-excel> -->
                 <v-card v-if="AllScanned.length > 0">
                     <!-- <download-excel class="btn" :data="scanned_shipments" :fields="json_fields" type="csv">

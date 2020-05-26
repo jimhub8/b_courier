@@ -9,7 +9,7 @@
                         Riders
                         <download-excel :data="allRiders.data" :fields="json_fields">
                             Export
-                            <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
+                            <img src="https://jimkiarie8.nyc3.digitaloceanspaces.com/boxleo/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
                         <v-btn slot="activator" color="primary" dark flat @click="openAdd">Add Rider</v-btn>
                         <!-- <v-btn slot="activator" color="orange" dark flat @click="openDeleted">Deleted Users</v-btn> -->

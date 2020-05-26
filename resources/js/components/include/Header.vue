@@ -292,7 +292,7 @@
         <v-toolbar dark app :color="color" :clipped-left="$vuetify.breakpoint.lgAndUp" fixed>
             <v-toolbar-title style="width: 600px" class="ml-0 pl-3">
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-                <img src="/storage/logo/Boxleo.png" alt style="width: 25%;">
+                <img :src="logo" alt style="width: 25%;">
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <!-- <v-tooltip bottom style="margin-right: 10px;">
@@ -359,6 +359,7 @@ export default {
             snackbar: false,
             timeout: 5000,
             message: "Success",
+            logo: process.env.MIX_LOGO,
         };
     },
     methods: {

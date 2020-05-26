@@ -55,7 +55,7 @@
                     <v-card-title>
                         <download-excel :data="AllShipments" :fields="json_fields">
                             Export
-                            <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
+                            <img src="https://jimkiarie8.nyc3.digitaloceanspaces.com/boxleo/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
                             <v-btn color="primary" flat @click="openShipment">Add Shipment</v-btn>
                             <v-btn color="primary" flat @click="ShipmentCsv">Upload Excel</v-btn>
