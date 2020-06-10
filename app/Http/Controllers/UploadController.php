@@ -11,6 +11,7 @@ use GuzzleHttp\Client;
 use App\User;
 use App\Shipment;
 use App\Status;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class UploadController extends Controller
@@ -84,12 +85,23 @@ class UploadController extends Controller
             // dd($order['delivery_date']);
             $order_data = new Shipment();
             // dd($order['phone'], $order['product_name'], $order["name_of_the_client"]);
-            // $similar_order = Shipment::where('client_phone', $order['phone'])
-            //     ->where('client_email', $order['product_name'])
-            //     ->where('client_name', $order["name_of_the_client"])
-            //     ->exists();
-                // dd($similar_order);
-            // if (!$similar_order) {
+            $yesterday = Carbon::yesterday();
+            $similar_order = Shipment::where('client_phone', $order['phone'])
+                ->where('client_email', $order['product_name'])
+                ->where('client_name', $order["name_of_the_client"])
+                ->where('client_address', $order["address"])
+                ->where('status', $order["status"])
+                ->where('created_at', '>', $yesterday)
+                ->exists();
+            $empty = false;
+            if ($order["name_of_the_client"] == null && $order["address"] == null && $order["city"] == null && $order["phone"] == null && $order["product_name"] == null && $order["quantity"] == null && $order["cod_amount"] == null) {
+                $empty = true;
+            }
+            // if ($empty) {
+            //    dd($order["name_of_the_client"] == null && $order["address"] == null && $order["city"] == null && $order["phone"] == null && $order["product_name"] == null && $order["quantity"] == null && $order["cod_amount"] == null, $order);
+            // }
+            // dd($similar_order);
+            if (!$similar_order && !$empty) {
                 $order_exists = Shipment::where('bar_code', $order["order_id"])->exists();
                 if (!$order_exists) {
                     // $order_data->order_id = $order["order_id"];
@@ -98,6 +110,9 @@ class UploadController extends Controller
                         if ($order["order_id"]) {
                             $order_data->bar_code = $order["order_id"];
                         } else {
+                            // dd(!$similar_order || !$empty, $order);
+
+                            // dd($order);
                             $order_data->bar_code = $bar_code->airwaybill_no($client_det);
                         }
                     } else {
@@ -170,8 +185,10 @@ class UploadController extends Controller
                     $order_data->client_id = $request->client;
                     // $order_data->country = $order->country;
                     $order_data->country_id = Auth::user()->country_id;
-                    $order_data->save();
-                // }
+                    if ($order_data->airway_bill_no) {
+                        $order_data->save();
+                    }
+                }
             }
         }
         return redirect('/#/shipments');

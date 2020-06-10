@@ -15,7 +15,7 @@ class AutoGenerate
             // dd('122');
             // $start_no = $client->waybill_count_start;
             $inv_arr = explode('BL', $shipments->airway_bill_no);
-            // dd($inv_arr);
+            // dd(count($inv_arr));
             $inv_arr = (int) $inv_arr[1];
             // dd($inv_arr);
             // $id = ''.str_pad($product->id + 1, 8, $start_no, STR_PAD_LEFT);
@@ -47,5 +47,10 @@ class AutoGenerate
                 return 'BL' . str_pad(1, 8, $shipments->id + 1000, STR_PAD_LEFT);
             }
         }
+    }
+    public function generate()
+    {
+        // $id = IdGenerator::generate(['table' => 'shipments', 'length' => 10, 'prefix' =>'BL']);
+//output: INV-000001
     }
 }
