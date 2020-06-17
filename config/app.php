@@ -170,6 +170,7 @@ return [
         // \Safaricom\Mpesa\MpesaServiceProvider::class,
         \Torann\GeoIP\GeoIPServiceProvider::class,
 
+        App\Providers\GoogleDriveServiceProvider::class,
 
     ],
 
