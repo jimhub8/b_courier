@@ -20,7 +20,7 @@
         "vue-template-compiler": "^2.6.10",
         "@fortawesome/fontawesome-free": "^5.2.0",
         "bootstrap": "^4.0.0",
-        "jquery": "^3.2",
+        "jquery": "^3.5",
         "material-design-icons-iconfont": "^3.0.3",
         "popper.js": "^1.12"
     },
