@@ -32,7 +32,7 @@ margin-left: 60px !important;
     <v-app id="inspire">
         <v-layout row wrap style="height: 100vh;">
             {{-- <v-flex sm8 style="background: url(/storage/signup-background.jpeg);background-attachment: fixed;background-position: center;"> --}}
-                <v-flex sm8 style="background: url(https://jimkiarie8.nyc3.digitaloceanspaces.com/boxleo/signup-background.jpeg);background-attachment: fixed;background-position: center;">
+                <v-flex sm8 style="background: url(/img/signup-background.jpeg);background-attachment: fixed;background-position: center;">
                     {{--  <h2><strong style="color: #fff; margin: auto">Get your products in your customers hands faster</strong></h2>  --}}
                     <div class="container" style="margin: auto;width: 85%;">
 
@@ -59,7 +59,7 @@ margin-left: 60px !important;
                     </div>
             </v-flex>
             <v-flex sm3 offset-sm1 style="margin: auto;">
-                <img src="{{ asset('/storage/logo/boxleo_logo.png') }}" alt="" srcset="">
+                <img src="{{ asset('/logo_1/boxleo_logo.png') }}" alt="" srcset="">
                 <hr>
                 <strong>Welcome back!</strong>
                 <p style="margin: 1.875rem 0;font-weight: 600;color: #8695af !important;">We can't wait for you to see what's new.  Happy Shipping!</p>
