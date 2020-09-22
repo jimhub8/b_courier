@@ -4,7 +4,7 @@
 @foreach ($shipments as $shipment)
         <div class="page-break">
             <div style="">
-                        <img src="/storage/logo_1/Boxleo%20logo_Approved-01.png" alt="" style="width: 40%;">
+                        <img src="https://app.boxleo.co.ke/logo_1/Boxleo%20logo_Approved-01.png" alt="" style="width: 40%;">
                         {{-- <p>{{ $shipment['barcode'] }}</p> --}}
                         <div style="float: right;">
                             <img src="{{ $shipment['barcode'] }}" alt="" style="width: 200px; height: 80px">
