@@ -3,7 +3,7 @@
 @section('content')
         <div>
             <div>
-                        <img src="/storage/logo_1/Boxleo%20logo_Approved-01.png" alt="" style="width: 40%;">
+                        <img src="/logo_1/Boxleo%20logo_Approved-01.png" alt="" style="width: 40%;">
                         {{-- <img src="https://jimkiarie8.nyc3.digitaloceanspaces.com/boxleo/logo_1/Boxleo%20logo_Approved-01.png" alt="" style="width: 40%;"> --}}
                         {{-- <p>{{ $shipments['barcode'] }}</p> --}}
                         <div style="float: right;">
